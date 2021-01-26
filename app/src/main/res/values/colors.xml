@@ -1,10 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="colorPrimary">#f33449</color>
+    <color name="colorPrimaryDark">@color/colorBackground</color>
+    <color name="colorAccent">#17b760</color>
+
+
+    <color name="grid_line">#132836</color>
+    <color name="grid_line_red">#f33449</color>
+
+    <color name="color_red">#F1364B</color>
+
+    <color name="colorBlueDeep">#132836</color>
+    <color name="colorBackgroundDark">#e9e6df</color>
+    <color name="colorBackground">#f7f9fb</color>
+
+    <color name="colorPurple">#70338e</color>
+    <color name="colorUnreadRed">#fa3e3e</color>
+    <color name="colorIcons">#fdfbfd</color>
+
+    <color name="colorLightGreen">#17b760</color>
+    <color name="colorGreen">#17b760</color>
+    <color name="colorBlue">#007AFF</color>
+    <color name="color_Blue">#5764b1</color>
+    <color name="color_Blue2">#1c5f9e</color>
+    <color name="color_Blue3">#064b92</color>
+    <color name="color_blue4">#0050a0</color>
+    <color name="color_blue5">#044f9a</color>
+    <color name="color_blue6">#7fbfff</color>
+    <color name="color_blue7">#125ca2</color>
+
+
+    <color name="off_white">#e9edf4</color>
+    <color name="color_light_green">#f4f8ff</color>
+    <color name="color_grey">#d8d8d8</color>
+    <color name="color_grey_text">#a8aaab</color>
+    <color name="color_light_black">#4b4a4a</color>
+    <color name="color_light_black3">#4e4d4d</color>
+    <color name="color_light_black2">#5a5c7b</color>
+    <color name="color_light_black4">#656565</color>
+    <color name="color_light_black5">#2c2828</color>
+    <color name="color_light_black6">#a5a5a5</color>
+
+
+
+    <color name="color_light_blue">#7781c0</color>
+    <color name="color_line">#e6e1e1</color>
+    <color name="color_disable">#e6e1e1</color>
+
+
+    <color name="colorGrey3">#a7a7a7</color>
+
+    <color name="colorGreenLight">#E6F2FF</color>
+    <color name="colorRedDark">#CD6155</color>
+    <color name="colorPurpleLight">#AF7AC5</color>
+    <color name="colorPurple2">#ae65dc</color>
+    <color name="colorBlueDark">#5499C7</color>
+    <color name="GreenSec">#45B39D</color>
+    <color name="colorOrange">#E59866</color>
+    <color name="colorGreySec">#85929E</color>
+    <color name="colorGreenDark">#009688</color>
+
+    <color name="colorBlueLight">#176cbc</color>
+    <color name="colorYellow">#FFB74D</color>
+
+    <color name="colorMenuOption">#333234</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorRed2">#E02020</color>
+    <color name="colorWhite_Alpha_60">#e0e0e0</color>
+    <color name="colorWhite_Alpha_70">#B3FFFFFF</color>
+
+    <color name="colorPink">#F06292</color>
+    <color name="colorPink2">#fae7e9</color>
+
+
+    <color name="colorBlack">#000000</color>
+    <color name="colorTransparent">#00000000</color>
+
+    <color name="colorRed">#b61827</color>
+    <color name="colorAccentRed">#ef5350</color>
+
+    <color name="colorTextDarkGrey">#69676a</color>
+    <color name="colorTextMenuDarkGrey">#434243</color>
+
+    <color name="colorClassifiedText">#59777a</color>
+    <color name="colorClassifiedFieldText">#0b292d</color>
+
+
+    <color name="color_grey4">#6c6c6c</color>
+    <color name="colorTextGrey">#a8aaab</color>
+    <color name="colorTextGreyHint">#424242</color>
+
+    <color name="colorAccent70">#B34b2f6b</color>
+
+    <color name="colorText">#f2eef4</color>
+
+
+    <color name="color_green">#46c179</color>
+    <color name="color_blue_2">#00509b</color>
+    <color name="colorAppName">#00509b</color>
+    <color name="colorSearchView">#d9d6d6</color>
+    <color name="colorPostText">#071532</color>
+    <color name="colorPostText2">#303347</color>
+    <color name="colorPostDarkText">#132836</color>
+    <color name="colorDivider">#cfc4c4</color>
+    <color name="colorProgressBackground">#e4e3e3</color>
+
+    <color name="colorShadow">#66000000</color>
+    <color name="colorPressed">#795999</color>
+    <color name="colorRipple">@color/colorAccent</color>
+
+    <color name="colorLightBlue">#f5f9fc</color>
+    <color name="colorGreyText">#9FA7B3</color>
+    <color name="colorLightBlackText">#757575</color>
 </resources>
