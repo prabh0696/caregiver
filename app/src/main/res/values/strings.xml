@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">CareGiver</string>
+
+    <string name="signup_header1">Create Account</string>
+    <string name="signup_header2">Join CareGiver</string>
+    <string name="signup_header3">Fill the details &amp; create your account</string>
+    <string name="fname">First Name</string>
+    <string name="lname">Last Name</string>
+    <string name="email">Email Address</string>
+    <string name="phone">Phone</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="label_continue">Continue</string>
 </resources>
