@@ -15,4 +15,7 @@
     <string name="login_as_user">Login As User</string>
     <string name="login_as_admin">Login As Admin</string>
 
+    <string name="sign_in">Sign In</string>
+    <string name="create_account">Create Account?</string>
+
 </resources>
