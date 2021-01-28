@@ -11,6 +11,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.caregiver.MainActivity;
 import com.caregiver.R;
+import com.caregiver.ui.login.LoginOptionActivity;
 
 
 import androidx.annotation.Nullable;
@@ -28,7 +29,7 @@ public class SplashActivity extends AppCompatActivity {
 
         new Handler().postDelayed(() -> {
 
-            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            startActivity(new Intent(SplashActivity.this, LoginOptionActivity.class));
 
             finish();
         }, 2 * 1000);
