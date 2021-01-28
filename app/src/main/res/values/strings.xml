@@ -18,4 +18,16 @@
     <string name="sign_in">Sign In</string>
     <string name="create_account">Create Account?</string>
 
+    <string name="other_detail">Other Details</string>
+    <string name="hourly_charges">Hourly Charges</string>
+    <string name="about_self">About Self</string>
+    <string name="address">Address</string>
+    <string name="landmark">Landmark</string>
+    <string name="street">Street</string>
+    <string name="city">City</string>
+    <string name="state">State/Provience</string>
+    <string name="country">Country</string>
+    <string name="pincode">Pincode</string>
+
+
 </resources>
