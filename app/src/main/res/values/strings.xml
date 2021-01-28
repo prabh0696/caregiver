@@ -28,6 +28,8 @@
     <string name="state">State/Provience</string>
     <string name="country">Country</string>
     <string name="pincode">Pincode</string>
+    <string name="qualification">Qualification</string>
+    <string name="experience">Experience</string>
 
 
 </resources>
