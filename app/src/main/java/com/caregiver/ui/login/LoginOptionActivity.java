@@ -59,7 +59,7 @@ public class LoginOptionActivity extends AppCompatActivity {
     }
 
     private void submitAction(int userType) {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, SignupActivity.class);
         intent.putExtra(Constants.key_user_type, userType);
         startActivity(intent);
     }
