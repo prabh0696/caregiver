@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.caregiver.MainActivity;
 import com.caregiver.R;
+import com.caregiver.core.Utils;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -72,6 +73,42 @@ public class SignupActivity extends AppCompatActivity {
 
     private void submitAction() {
         clearError();
+        String fName = et_fname.getText().toString().trim();
+        if (TextUtils.isEmpty(fName)) {
+            input_fname.setError(getString(R.string.empty_fname));
+            return;
+        }
+
+        String lName = et_lname.getText().toString().trim();
+        if (TextUtils.isEmpty(lName)) {
+            input_lname.setError(getString(R.string.empty_lname));
+            return;
+        }
+
+        String phone = et_phone.getText().toString().trim();
+        if (TextUtils.isEmpty(phone)) {
+            input_phone.setError(getString(R.string.empty_phone));
+            return;
+        }
+
+        String email = et_email.getText().toString().trim();
+        if (TextUtils.isEmpty(email)) {
+            input_email.setError(getString(R.string.empty_email));
+            return;
+        } else if (!Utils.validateEmailAddr(email)) {
+            input_email.setError(getString(R.string.invalid_email));
+            return;
+        }
+        String password = et_password.getText().toString().trim();
+        if (TextUtils.isEmpty(password)) {
+            input_password.setError(getString(R.string.empty_password));
+            return;
+        }
+        String cPassword = et_confirm_password.getText().toString().trim();
+        if (!password.equals(cPassword)) {
+            input_conform_password.setError(getString(R.string.invalid_cPassword));
+            return;
+        }
         startActivity(new Intent(this, MainActivity.class));
     }
 }

@@ -31,5 +31,11 @@
     <string name="qualification">Qualification</string>
     <string name="experience">Experience</string>
 
-
+    <string name="empty_fname">Enter first name</string>
+    <string name="empty_lname">Enter last name</string>
+    <string name="empty_phone">Enter phone number</string>
+    <string name="empty_email">Enter email address</string>
+    <string name="invalid_email">Invalid email address</string>
+    <string name="empty_password">Enter password</string>
+    <string name="invalid_cPassword">Password and Confirm password should be same</string>
 </resources>
