@@ -2,6 +2,7 @@ package com.caregiver.ui.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -10,6 +11,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.caregiver.R;
 import com.caregiver.core.Constants;
+import com.caregiver.core.Utils;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -36,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         findViewById(R.id.btn_continue).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                submitAction();
             }
         });
         TextView signupBtn = findViewById(R.id.signupBtn);
@@ -73,7 +75,27 @@ public class LoginActivity extends AppCompatActivity {
                 .into((AppCompatImageView) findViewById(R.id.tv_cloud));
     }
 
+    private void clearError() {
+        input_username.setError(null);
+        input_password.setError(null);
+    }
 
+    private void submitAction() {
+        clearError();
+        String email = et_email.getText().toString().trim();
+        if (TextUtils.isEmpty(email)) {
+            input_username.setError(getString(R.string.empty_email));
+            return;
+        } else if (!Utils.validateEmailAddr(email)) {
+            input_username.setError(getString(R.string.invalid_email));
+            return;
+        }
+        String password = et_password.getText().toString().trim();
+        if (TextUtils.isEmpty(password)) {
+            input_password.setError(getString(R.string.empty_password));
+            return;
+        }
+    }
 
 
 }
