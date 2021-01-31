@@ -38,4 +38,16 @@
     <string name="invalid_email">Invalid email address</string>
     <string name="empty_password">Enter password</string>
     <string name="invalid_cPassword">Password and Confirm password should be same</string>
+
+    <string name="empty_about">Tell me something about your self</string>
+    <string name="empty_charges">Enter your charges</string>
+    <string name="empty_experience">Enter your experience</string>
+    <string name="empty_qualification">Enter your qualification</string>
+    <string name="empty_address">Enter address</string>
+    <string name="empty_landmark">Enter landmark</string>
+    <string name="empty_street">Enter street</string>
+    <string name="empty_city">Enter city</string>
+    <string name="empty_state">Enter state or provience</string>
+    <string name="empty_country">Enter country</string>
+    <string name="empty_pincode">Enter pincode</string>
 </resources>
