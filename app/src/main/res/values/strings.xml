@@ -63,4 +63,7 @@
     <string name="forgot_password">Forgot Password</string>
     <string name="email_not_exist">No user exist with this email address</string>
     <string name="pass_sent">Password has been sent to </string>
+
+    <string name="my_profile">My Profile</string>
+    <string name="logout">Logout</string>
 </resources>
