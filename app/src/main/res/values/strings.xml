@@ -52,4 +52,11 @@
     <string name="empty_pincode">Enter pincode</string>
 
     <string name="admin">Admin</string>
+
+    <string name="select_user_type">Select User Type</string>
+    <string name="all_user">All</string>
+    <string name="parents">Parents</string>
+    <string name="nurse">Nurse</string>
+    <string name="nanny">Nanny</string>
+    <string name="search_hint">Search Nanny/Nurse</string>
 </resources>
