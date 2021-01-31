@@ -103,7 +103,6 @@
                         android:drawablePadding="10dp"
                         android:importantForAutofill="no"
                         android:inputType="textNoSuggestions|textEmailAddress"
-                        android:maxLength="15"
                         android:maxLines="1"
                         android:singleLine="true" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -141,17 +140,40 @@
                     android:text="@string/sign_in"
                     android:textColor="@color/colorWhite" />
 
-                <TextView
-                    android:id="@+id/signupBtn"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:text="@string/create_account"
-                    android:textColor="@color/colorPostText"
-                    android:textSize="@dimen/_10sdp"
-                    android:textStyle="normal"
-                    android:visibility="gone"/>
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp">
+
+                    <TextView
+                        android:id="@+id/signupBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/create_account"
+                        android:textColor="@color/colorPostText"
+                        android:textSize="@dimen/_10sdp"
+                        android:textStyle="normal"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/forgotPwd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="@string/forgot_password"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:textColor="@color/colorPostText"
+                        android:textSize="@dimen/_10sdp"
+                        android:textStyle="normal"
+                        />
+                </RelativeLayout>
+
 
 
             </LinearLayout>

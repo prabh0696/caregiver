@@ -38,6 +38,10 @@
             android:name=".ui.admin.AdminDashBoardActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".ui.login.ForgotPassowrdActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".MainActivity">
         </activity>
     </application>
