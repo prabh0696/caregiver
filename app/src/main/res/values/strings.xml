@@ -69,4 +69,7 @@
 
     <string name="user_not_exist">Invalid user name or password</string>
 
+    <string name="empty_user_type">Select User Type</string>
+    <string name="email_exist">Email address already exist</string>
+    <string name="phone_exist">Phone number already exist</string>
 </resources>

@@ -60,8 +60,8 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/tv_cloud"
-                android:layout_width="@dimen/_353sdp"
-                android:layout_height="@dimen/_196sdp"
+                android:layout_width="353dp"
+                android:layout_height="196dp"
                 android:paddingStart="4dp"
                 android:paddingLeft="4dp"
                 android:paddingEnd="4dp"
@@ -104,7 +104,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginStart="0dp"
                     android:layout_marginLeft="0dp"
-                    android:layout_marginTop="@dimen/_25sdp"
+                    android:layout_marginTop="25dp"
                     android:layout_marginEnd="0dp"
                     android:layout_marginRight="0dp"
                     android:text="@string/login_as_admin"

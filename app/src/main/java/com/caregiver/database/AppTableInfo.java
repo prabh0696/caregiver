@@ -15,9 +15,6 @@ import java.util.Date;
 
 
 public final class AppTableInfo {
-    public static final int ROUTE_STARTED = 1,
-            ROUTE_FINISHED = 2;
-
 
     //Profile table
     private static final String TABLE_NAME_USER = "User",
