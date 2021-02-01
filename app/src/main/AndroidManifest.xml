@@ -42,7 +42,7 @@
             android:name=".ui.login.ForgotPassowrdActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.home.MainActivity">
         </activity>
     </application>
 

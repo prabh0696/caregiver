@@ -1,6 +1,9 @@
 package com.caregiver.ui.login;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -12,12 +15,17 @@ import com.bumptech.glide.request.RequestOptions;
 import com.caregiver.R;
 import com.caregiver.core.Constants;
 import com.caregiver.core.Utils;
+import com.caregiver.core.models.User;
+import com.caregiver.database.AppTableInfo;
+import com.caregiver.ui.admin.AdminDashBoardActivity;
+import com.caregiver.ui.home.MainActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -29,12 +37,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        registerLocalBroadcastReciver();
+        ;
         clickListener();
         setupViewPager();
 
     }
 
-    private void clickListener(){
+    private void clickListener() {
         findViewById(R.id.btn_continue).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -42,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         TextView signupBtn = findViewById(R.id.signupBtn);
-        if(getIntent().getIntExtra(Constants.key_user_type, 0) != Constants.USER_TYPE_ADMIN){
+        if (getIntent().getIntExtra(Constants.key_user_type, 0) != Constants.USER_TYPE_ADMIN) {
             signupBtn.setVisibility(View.VISIBLE);
             signupBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -52,7 +62,12 @@ public class LoginActivity extends AppCompatActivity {
             });
         }
 
-
+        findViewById(R.id.forgotPwd).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(view.getContext(), ForgotPassowrdActivity.class));
+            }
+        });
 
 
     }
@@ -95,7 +110,49 @@ public class LoginActivity extends AppCompatActivity {
             input_password.setError(getString(R.string.empty_password));
             return;
         }
+
+        User user = AppTableInfo.doLogin(Constants.getDataBaseObj(getApplicationContext()),
+                email,
+                password);
+        if (user == null) {
+            input_password.setError(getString(R.string.user_not_exist));
+            return;
+        } else {
+            Constants.loginUserId = user.id;
+            if (user.User_Type == Constants.USER_TYPE_ADMIN) {
+                startActivity(new Intent(this, AdminDashBoardActivity.class));
+            } else {
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra(Constants.key_user, user);
+                startActivity(intent);
+            }
+            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(Constants.MOVE_TO_HOME_ACTION));
+        }
     }
 
+    private BroadcastReceiver broadcastReceiver;
 
+    private void registerLocalBroadcastReciver() {
+        broadcastReceiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if (action.equalsIgnoreCase(Constants.MOVE_TO_HOME_ACTION)) {
+                    finish();
+                }
+            }
+        };
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Constants.MOVE_TO_HOME_ACTION);
+
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(broadcastReceiver, intentFilter);
+
+    }
+
+    public void finish() {
+        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(broadcastReceiver);
+        super.finish();
+    }
 }
+

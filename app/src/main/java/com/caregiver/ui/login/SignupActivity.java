@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.caregiver.MainActivity;
+import com.caregiver.ui.home.MainActivity;
 import com.caregiver.R;
 import com.caregiver.core.Utils;
 import com.google.android.material.textfield.TextInputEditText;

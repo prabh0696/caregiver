@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 
-import com.caregiver.MainActivity;
+import com.caregiver.ui.home.MainActivity;
 import com.caregiver.R;
 import com.caregiver.core.Constants;
 import com.caregiver.core.models.Address;

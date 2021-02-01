@@ -66,4 +66,7 @@
 
     <string name="my_profile">My Profile</string>
     <string name="logout">Logout</string>
+
+    <string name="user_not_exist">Invalid user name or password</string>
+
 </resources>
