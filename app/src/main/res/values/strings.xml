@@ -47,7 +47,7 @@
     <string name="empty_landmark">Enter landmark</string>
     <string name="empty_street">Enter street</string>
     <string name="empty_city">Enter city</string>
-    <string name="empty_state">Enter state or provience</string>
+    <string name="empty_state">Enter state or province</string>
     <string name="empty_country">Enter country</string>
     <string name="empty_pincode">Enter pincode</string>
 
