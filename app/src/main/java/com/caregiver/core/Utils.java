@@ -10,6 +10,9 @@ import android.util.Patterns;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.caregiver.core.models.User;
+import com.caregiver.ui.profile.ProfileActivity;
+
 public class Utils {
 
     public static boolean validateEmailAddr(String emailAddr){
@@ -37,5 +40,11 @@ public class Utils {
                 cursor.close();
             }
         }
+    }
+
+    public static void openProfile(Context context, User pi){
+        Intent intent = new Intent(context, ProfileActivity.class);
+        intent.putExtra(Constants.key_user, pi);
+        context.startActivity(intent);
     }
 }

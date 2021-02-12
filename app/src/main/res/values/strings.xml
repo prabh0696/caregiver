@@ -75,4 +75,6 @@
 
     <string name="edit">Edit</string>
     <string name="other_information">Other Information</string>
+
+    <string name="book">Book</string>
 </resources>
