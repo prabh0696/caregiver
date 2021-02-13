@@ -1,0 +1,62 @@
+package com.caregiver.adapter;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.caregiver.R;
+import com.caregiver.adapter.views.UserItemView;
+import com.caregiver.core.Utils;
+import com.caregiver.core.models.User;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+public class UserListAdapter extends RecyclerView.Adapter<UserItemView> {
+    private List<User> items = new ArrayList<User>();
+
+    @NonNull
+    @Override
+    public UserItemView onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.user_item_view, parent, false);
+
+        return new UserItemView(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull UserItemView holder, int position) {
+        holder.bind(items.get(position));
+        holder.root.setOnClickListener(v -> {
+            Utils.openProfile(v.getContext(), items.get(position));
+        });
+
+
+    }
+
+    public boolean addItems(List<User> list) {
+        if (list != null && !list.isEmpty()) {
+            items.addAll(list);
+            notifyDataSetChanged();
+            return true;
+        }else{
+            for(int i =0; i < 5; i++){
+                items.add(new User());
+            }
+        }
+        return false;
+    }
+
+    public void clear() {
+        items.clear();
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemCount() {
+        return items.size();
+    }
+}
