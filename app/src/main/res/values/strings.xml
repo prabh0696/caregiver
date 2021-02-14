@@ -88,4 +88,11 @@
     <string name="error_from_date">From date should be before To date </string>
     <string name="error_to_date">To date can\'t be before From date </string>
     <string name="empty_from_date">Enter from date</string>
+    <string name="empty_to_date">Enter To date</string>
+    <string name="empty_to_time">Enter To time</string>
+    <string name="empty_from_time">Enter From time</string>
+
+    <string name="update">Update</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="booking_req_sent">Booking request sent successfully</string>
 </resources>

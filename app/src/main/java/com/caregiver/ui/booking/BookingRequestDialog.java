@@ -1,22 +1,37 @@
 package com.caregiver.ui.booking;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 import com.caregiver.R;
+import com.caregiver.core.Constants;
+import com.caregiver.core.WebApi;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public final class BookingRequestDialog extends Dialog {
 
@@ -26,14 +41,18 @@ public final class BookingRequestDialog extends Dialog {
     private TextInputLayout input_from_date, input_to_date,
             input_from_time, input_to_time;
     private TextInputEditText from_date, to_date,
-            from_time, to_time;
+            from_time, to_time,
+            message;
 
     private int fromDate, fromMonth, fromYear,
             toDate, toMonth, toYear;
 
-    public BookingRequestDialog(Context context, String loggedUserId, String userId) {
+    private String userId = "";
+
+    public BookingRequestDialog(Context context, String userId) {
         super(context);
         mContext = context;
+        this.userId = userId;
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.setContentView(R.layout.booking_request_dialog);
         getWindow().setBackgroundDrawableResource(R.drawable.round_rect_shape1);
@@ -142,9 +161,9 @@ public final class BookingRequestDialog extends Dialog {
         int minute = c.get(Calendar.MINUTE);
         int amPm = c.get(Calendar.AM_PM);
 
-        String hourStr = ""+hour;
-        if(hour < 10){
-            hourStr = "0"+hour;
+        String hourStr = "" + hour;
+        if (hour < 10) {
+            hourStr = "0" + hour;
         }
         String minStr = "" + minute;
         if (minute < 10) {
@@ -165,13 +184,11 @@ public final class BookingRequestDialog extends Dialog {
     private void setDateParam(boolean isFrom) {
         Calendar c = Calendar.getInstance();
 
-        // set the calendar to start of today
         c.set(Calendar.HOUR_OF_DAY, 0);
         c.set(Calendar.MINUTE, 0);
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MILLISECOND, 0);
 
-        // and get that as a Date
         if (isFrom) {
             fromDate = c.get(Calendar.DAY_OF_MONTH);
             fromMonth = c.get(Calendar.MONTH);
@@ -209,10 +226,10 @@ public final class BookingRequestDialog extends Dialog {
         DatePickerDialog dialog = new DatePickerDialog(mContext, android.R.style.Theme_DeviceDefault_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                //DO SOMETHING
+
                 if (isFromDate) {
                     if (dayOfMonth == toDate && monthOfYear == toMonth && year == toYear) {
-                        //this is safe case
+
                     } else if (!isBeforeToDate(dayOfMonth, monthOfYear, year)) {
                         input_from_date.setError(mContext.getString(R.string.error_from_date));
                         return;
@@ -248,7 +265,6 @@ public final class BookingRequestDialog extends Dialog {
             }
         }, yyyy, mm, dd);
         dialog.setTitle(mContext.getString(resourceID) + " " + mContext.getString(R.string.date));
-        dialog.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis());
         dialog.show();
     }
 
@@ -275,13 +291,10 @@ public final class BookingRequestDialog extends Dialog {
         int currentDay = fromDate;
 
         if (startYear < currentYear) {
-            //message = message + "Start Date is Before Today" + "\n";
             result = true;
         } else if (startMonth < currentMonth && startYear <= currentYear) {
-            //message = message + "Start Date is Before Today" + "\n";
             result = true;
         } else if (startDay < currentDay && startMonth <= currentMonth && startYear <= currentYear) {
-            //message = message + "Start Date is Before Today" + "\n";
             result = true;
         }
         return result;
@@ -291,13 +304,11 @@ public final class BookingRequestDialog extends Dialog {
     private long getDate(int date, int month, int year) {
         Calendar c = Calendar.getInstance();
 
-        // set the calendar to start of today
         c.set(Calendar.HOUR_OF_DAY, 0);
         c.set(Calendar.MINUTE, 0);
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MILLISECOND, 0);
 
-        // reuse the calendar to set user specified date
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, date);
@@ -330,7 +341,7 @@ public final class BookingRequestDialog extends Dialog {
                 }
 
             }
-        }, hour, minute, false);//No 24 hour time
+        }, hour, minute, false);
         if (isFrom) {
             mTimePicker.setTitle(mContext.getString(R.string.from_date) + " " + mContext.getString(R.string.time));
         } else {
@@ -342,12 +353,97 @@ public final class BookingRequestDialog extends Dialog {
 
     private void submitClick() {
 
+        input_to_date.setError(null);
         input_from_date.setError(null);
-        String fromDate = from_date.getText().toString().trim();
-        if (TextUtils.isEmpty(fromDate)) {
+        String fromDate1 = from_date.getText().toString().trim();
+        if (TextUtils.isEmpty(fromDate1)) {
             input_from_date.setError(mContext.getString(R.string.empty_from_date));
             return;
         }
-        dismiss();
+        String toDate1 = to_date.getText().toString().trim();
+        if (TextUtils.isEmpty(toDate1)) {
+            input_to_date.setError(mContext.getString(R.string.empty_to_date));
+            return;
+        }
+
+        String fromTime = from_time.getText().toString().trim();
+        if (TextUtils.isEmpty(fromTime)) {
+            input_from_time.setError(mContext.getString(R.string.empty_from_time));
+            return;
+        }
+
+        String toTime = to_time.getText().toString().trim();
+        if (TextUtils.isEmpty(toTime)) {
+            input_to_time.setError(mContext.getString(R.string.empty_to_time));
+            return;
+        }
+        String fDate = fromYear+"-"+formatValue(fromMonth)+"-"+formatValue(fromDate);
+        String tDate = toYear+"-"+formatValue(toMonth)+"-"+formatValue(toDate);
+
+
+        submitData(fDate,
+                tDate,
+                fromTime,
+                toTime,
+                message.getText().toString().trim());
+    }
+
+    private String formatValue(int value){
+        String str = ""+value;
+        if(value < 10){
+            str = "0"+value;
+        }
+        return str;
+    }
+
+    private void submitData(String fromDate,
+                            String toDate,
+                            String fromTime,
+                            String toTime,
+                            String bookingMessage) {
+
+        WebApi.showLoadingDialog(mContext);
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+        RequestBody body = RequestBody.create(mediaType, "from_user_id=" + Constants.loginUser.id
+                + "&to_user_id=" + userId
+                + "&from_date="+fromDate
+                +"&to_date="+toDate
+                +"&from_time="+fromTime
+                +"&to_time="+toTime
+                +"&booking_message="+bookingMessage);
+        Request request = new Request.Builder()
+                .url(WebApi.ADD_BOOKING)
+                .method("POST", body)
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d(Constants.TAG, "Login::onFailure::Exception: " + e);
+                ((Activity)mContext).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        WebApi.dismissLoadingDialog();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                WebApi.dismissLoadingDialog();
+                ((Activity)mContext).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Constants.BOOKING_ADDED_ACTION));
+                        dismiss();
+                        WebApi.showLongToast(mContext, mContext.getString(R.string.booking_req_sent));
+                    }
+                });
+            }
+        });
+
     }
 }

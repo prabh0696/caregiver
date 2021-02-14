@@ -7,9 +7,11 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.asksira.bsimagepicker.BSImagePicker;
@@ -18,17 +20,27 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.caregiver.R;
 import com.caregiver.core.Constants;
+import com.caregiver.core.ResponseParser;
 import com.caregiver.core.Utils;
+import com.caregiver.core.WebApi;
 import com.caregiver.core.models.User;
-import com.caregiver.database.AppTableInfo;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.io.IOException;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class SignupActivity extends AppCompatActivity implements BSImagePicker.OnSingleImageSelectedListener {
 
@@ -113,6 +125,7 @@ public class SignupActivity extends AppCompatActivity implements BSImagePicker.O
         et_phone = findViewById(R.id.et_phone);
 
         setUserTypeDropDown();
+        checkForEdit();
     }
 
     private void setUserTypeDropDown() {
@@ -124,6 +137,30 @@ public class SignupActivity extends AppCompatActivity implements BSImagePicker.O
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.item_drop_down, categoryArray);
         userTypeDropDown.setAdapter(arrayAdapter);
+    }
+
+    private void checkForEdit() {
+        if (getIntent().getBooleanExtra(Constants.key_is_from_edit, false)) {
+
+            TextView title = findViewById(R.id.title);
+            title.setText(R.string.edit_profile);
+
+            btn_continue.setText(R.string.update);
+            findViewById(R.id.iv_sub_text).setVisibility(View.GONE);
+            findViewById(R.id.iv_header).setVisibility(View.GONE);
+            input_conform_password.setVisibility(View.GONE);
+            input_password.setVisibility(View.GONE);
+            user = getIntent().getParcelableExtra(Constants.key_user);
+            if (user != null) {
+                et_fname.setText(user.First_Name);
+                et_lname.setText(user.Last_Name);
+                et_phone.setText(user.Phone);
+                et_email.setText(user.Email);
+                userTypeDropDown.setSelection(user.User_Type);
+                imagePath = user.Photo;
+                setUserImage(user.Photo);
+            }
+        }
     }
 
 
@@ -142,6 +179,7 @@ public class SignupActivity extends AppCompatActivity implements BSImagePicker.O
 
     private void submitAction() {
         clearError();
+        boolean isEdit = getIntent().getBooleanExtra(Constants.key_is_from_edit, false);
         int index = userTypeDropDown.getSelectedItemPosition();
         if (index == 0) {
             Toast.makeText(this, R.string.empty_user_type, Toast.LENGTH_LONG).show();
@@ -175,51 +213,142 @@ public class SignupActivity extends AppCompatActivity implements BSImagePicker.O
             return;
         }
 
-        String password = et_password.getText().toString().trim();
-        if (TextUtils.isEmpty(password)) {
-            input_password.setError(getString(R.string.empty_password));
-            return;
-        }
-        String cPassword = et_confirm_password.getText().toString().trim();
-        if (!password.equals(cPassword)) {
-            input_conform_password.setError(getString(R.string.invalid_cPassword));
-            return;
+        String password = "";
+        if (!isEdit) {
+            password = et_password.getText().toString().trim();
+            if (TextUtils.isEmpty(password)) {
+                input_password.setError(getString(R.string.empty_password));
+                return;
+            }
+            String cPassword = et_confirm_password.getText().toString().trim();
+            if (!password.equals(cPassword)) {
+                input_conform_password.setError(getString(R.string.invalid_cPassword));
+                return;
+            }
         }
 
 
-        if(user == null){
+        if (user == null) {
             user = new User();
         }
         user.Email = email;
         user.Phone = phone;
-        user.Password = password;
+        if (!isEdit) {
+            user.Password = password;
+        }
         user.First_Name = fName;
         user.Last_Name = lName;
         user.Photo = imagePath;
         user.User_Type = index;
 
-        User pi = AppTableInfo.checkUserExist(Constants.getDataBaseObj(getApplicationContext()),
-                user.Email, user.Phone);
-
-        if (pi != null) {
-            if (pi.Email.equalsIgnoreCase(email))
-                input_email.setError(getString(R.string.email_exist));
-            if (pi.Phone.equalsIgnoreCase(phone))
-                input_phone.setError(getString(R.string.phone_exist));
-            return;
-        } else {
-            long userId = AppTableInfo.createUser(Constants.getDataBaseObj(getApplicationContext()),
-                    user);
-            user.id = Integer.parseInt(String.valueOf(userId));
-            Intent intent = new Intent(this, UserDetailActivity.class);
-            intent.putExtra(Constants.key_is_from_signup, true);
-            intent.putExtra(Constants.key_user, user);
-            startActivity(intent);
-            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(Constants.MOVE_TO_HOME_ACTION));
-        }
+        submitData(user);
 
     }
 
+    private void submitData(User user) {
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+        String url = "";
+        RequestBody body = null;
+        if (user.id == 0) {
+            url = WebApi.SIGNUP;
+            body = RequestBody.create(mediaType, "first_name=" + user.First_Name
+                    + "&last_name=" + user.Last_Name
+                    + "&password=" + user.Password
+                    + "&user_type=" + user.User_Type
+                    + "&email=" + user.Email
+                    + "&phone=" + user.Phone
+                    + "&photo=" + user.Photo
+                    + "&charges=" + user.Charges
+                    + "&experience=" + user.Experience
+                    + "&qualification=" + user.Qualification
+                    + "&about=" + user.about
+                    + "&address=" + user.addr.Address
+                    + "&landmark=" + user.addr.landmark
+                    + "&street=" + user.addr.Street
+                    + "&city=" + user.addr.Street
+                    + "&state=" + user.addr.State
+                    + "&country=" + user.addr.Country
+                    + "&pincode=" + user.addr.Pincode);
+        } else {
+            url = WebApi.UPDATE_PROFILE;
+            body = RequestBody.create(mediaType, "id=" + user.id
+                    +"first_name=" + user.First_Name
+                    + "&last_name=" + user.Last_Name
+                    + "&password=" + user.Password
+                    + "&user_type=" + user.User_Type
+                    + "&email=" + user.Email
+                    + "&phone=" + user.Phone
+                    + "&photo=" + user.Photo
+                    + "&charges=" + user.Charges
+                    + "&experience=" + user.Experience
+                    + "&qualification=" + user.Qualification
+                    + "&about=" + user.about
+                    + "&address=" + user.addr.Address
+                    + "&landmark=" + user.addr.landmark
+                    + "&street=" + user.addr.Street
+                    + "&city=" + user.addr.Street
+                    + "&state=" + user.addr.State
+                    + "&country=" + user.addr.Country
+                    + "&pincode=" + user.addr.Pincode);
+        }
+
+
+        Request request = new Request.Builder()
+                .url(url)
+                .method("POST", body)
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d(Constants.TAG, "Signup::onFailure::Exception: " + e);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        WebApi.dismissLoadingDialog();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                if(user.id > 0){
+                    WebApi.dismissLoadingDialog();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(Constants.PROFILE_UPDATED_ACTION);
+                            intent.putExtra(Constants.key_user, user);
+                            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+                            finish();
+                        }
+                    });
+                }else{
+                    User user = ResponseParser.parseSignupResponse(response.body().string());
+                    WebApi.dismissLoadingDialog();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(user == null){
+                                input_email.setError(getString(R.string.email_exist));
+                            }else {
+                                Intent intent = new Intent(SignupActivity.this, UserDetailActivity.class);
+                                intent.putExtra(Constants.key_is_from_signup, true);
+                                intent.putExtra(Constants.key_user, user);
+                                startActivity(intent);
+                                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(Constants.MOVE_TO_HOME_ACTION));
+                            }
+                        }
+                    });
+                }
+
+            }
+        });
+    }
     private BroadcastReceiver broadcastReceiver;
 
     private void registerLocalBroadcastReciver() {
