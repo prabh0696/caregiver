@@ -140,8 +140,8 @@
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/userImage"
-                            android:layout_width="@dimen/_50sdp"
-                            android:layout_height="@dimen/_50sdp"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
                             android:layout_gravity="center_vertical"
                             android:src="@drawable/ic_user_profile"
                             app:civ_border_color="#cc8f8f"
@@ -161,7 +161,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Tom Smith"
                                 android:textColor="@color/colorPostText"
-                                android:textSize="@dimen/_12sdp"
+                                android:textSize="12dp"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -170,7 +170,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="94849183"
                                 android:textColor="@color/colorTextDarkGrey"
-                                android:textSize="@dimen/_11sdp"
+                                android:textSize="11dp"
                                 android:textStyle="normal" />
 
                             <TextView
@@ -179,7 +179,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="abc@gmail.com"
                                 android:textColor="@color/colorTextDarkGrey"
-                                android:textSize="@dimen/_11sdp"
+                                android:textSize="11dp"
                                 android:textStyle="normal" />
 
                         </LinearLayout>
@@ -244,7 +244,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/about_self"
                         android:textColor="@color/colorPostText"
-                        android:textSize="@dimen/_12sdp"
+                        android:textSize="12dp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -253,21 +253,21 @@
                         android:layout_height="wrap_content"
                         android:text="Dear Ms. Miles: I am writing to introduce myself as a driven and compassionate Nanny who has exceptional communication and childcare skills. Owing to my extensive childcare and housekeeping experiences, I can effectively take care of your children and household."
                         android:textColor="@color/colorPostDarkText"
-                        android:textSize="@dimen/_10sdp"
+                        android:textSize="10dp"
                         android:textStyle="normal"
-                        android:paddingLeft="@dimen/_10sdp"
-                        android:paddingStart="@dimen/_10sdp"
-                        android:paddingEnd="@dimen/_10sdp"
-                        android:paddingRight="@dimen/_10sdp"
-                        android:paddingTop="@dimen/_2sdp"
-                        android:paddingBottom="@dimen/_5sdp"/>
+                        android:paddingLeft="10dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="5dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/qualification"
                         android:textColor="@color/colorPostText"
-                        android:textSize="@dimen/_12sdp"
+                        android:textSize="12dp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -276,14 +276,14 @@
                         android:layout_height="wrap_content"
                         android:text="Master in Computer Science"
                         android:textColor="@color/colorPostDarkText"
-                        android:textSize="@dimen/_10sdp"
+                        android:textSize="10dp"
                         android:textStyle="normal"
-                        android:paddingLeft="@dimen/_10sdp"
-                        android:paddingStart="@dimen/_10sdp"
-                        android:paddingEnd="@dimen/_10sdp"
-                        android:paddingRight="@dimen/_10sdp"
-                        android:paddingTop="@dimen/_2sdp"
-                        android:paddingBottom="@dimen/_5sdp"/>
+                        android:paddingLeft="10dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="5dp"/>
 
 
                     <TextView
@@ -291,7 +291,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/experience"
                         android:textColor="@color/colorPostText"
-                        android:textSize="@dimen/_12sdp"
+                        android:textSize="12dp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -300,21 +300,21 @@
                         android:layout_height="wrap_content"
                         android:text="15 yrs"
                         android:textColor="@color/colorPostDarkText"
-                        android:textSize="@dimen/_10sdp"
+                        android:textSize="10dp"
                         android:textStyle="normal"
-                        android:paddingLeft="@dimen/_10sdp"
-                        android:paddingStart="@dimen/_10sdp"
-                        android:paddingEnd="@dimen/_10sdp"
-                        android:paddingRight="@dimen/_10sdp"
-                        android:paddingTop="@dimen/_2sdp"
-                        android:paddingBottom="@dimen/_5sdp"/>
+                        android:paddingLeft="10dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="5dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/hourly_charges"
                         android:textColor="@color/colorPostText"
-                        android:textSize="@dimen/_12sdp"
+                        android:textSize="12dp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -323,14 +323,14 @@
                         android:layout_height="wrap_content"
                         android:text="15 CAD"
                         android:textColor="@color/colorPostDarkText"
-                        android:textSize="@dimen/_10sdp"
+                        android:textSize="10dp"
                         android:textStyle="normal"
-                        android:paddingLeft="@dimen/_10sdp"
-                        android:paddingStart="@dimen/_10sdp"
-                        android:paddingEnd="@dimen/_10sdp"
-                        android:paddingRight="@dimen/_10sdp"
-                        android:paddingTop="@dimen/_2sdp"
-                        android:paddingBottom="@dimen/_5sdp"/>
+                        android:paddingLeft="10dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="5dp"/>
 
 
 
@@ -340,7 +340,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/address"
                         android:textColor="@color/colorPostText"
-                        android:textSize="@dimen/_12sdp"
+                        android:textSize="12dp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -349,14 +349,14 @@
                         android:layout_height="wrap_content"
                         android:text="3386 Baker Street, Cobourg, Ontario, Canada, 45612312"
                         android:textColor="@color/colorPostDarkText"
-                        android:textSize="@dimen/_10sdp"
+                        android:textSize="10dp"
                         android:textStyle="normal"
-                        android:paddingLeft="@dimen/_10sdp"
-                        android:paddingStart="@dimen/_10sdp"
-                        android:paddingEnd="@dimen/_10sdp"
-                        android:paddingRight="@dimen/_10sdp"
-                        android:paddingTop="@dimen/_2sdp"
-                        android:paddingBottom="@dimen/_5sdp"/>
+                        android:paddingLeft="10dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="5dp"/>
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>

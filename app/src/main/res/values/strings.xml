@@ -84,4 +84,8 @@
     <string name="to_date">To</string>
     <string name="submit">Submit</string>
     <string name="cancel">Cancel</string>
+
+    <string name="error_from_date">From date should be before To date </string>
+    <string name="error_to_date">To date can\'t be before From date </string>
+    <string name="empty_from_date">Enter from date</string>
 </resources>

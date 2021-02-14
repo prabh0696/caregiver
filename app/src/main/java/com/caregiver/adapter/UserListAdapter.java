@@ -8,6 +8,7 @@ import com.caregiver.R;
 import com.caregiver.adapter.views.UserItemView;
 import com.caregiver.core.Utils;
 import com.caregiver.core.models.User;
+import com.caregiver.ui.booking.BookingRequestDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,9 @@ public class UserListAdapter extends RecyclerView.Adapter<UserItemView> {
         holder.root.setOnClickListener(v -> {
             Utils.openProfile(v.getContext(), items.get(position));
         });
-
+        holder.btn_action.setOnClickListener(v -> {
+            new BookingRequestDialog(v.getContext(), "", "").show();
+        });
 
     }
 
