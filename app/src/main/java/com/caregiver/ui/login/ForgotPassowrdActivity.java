@@ -1,33 +1,29 @@
 package com.caregiver.ui.login;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
-import com.asksira.bsimagepicker.BSImagePicker;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.caregiver.R;
 import com.caregiver.core.Constants;
+import com.caregiver.core.ResponseParser;
 import com.caregiver.core.Utils;
-import com.caregiver.core.models.User;
-import com.caregiver.database.AppTableInfo;
+import com.caregiver.core.WebApi;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.io.IOException;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatSpinner;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 
 public class ForgotPassowrdActivity extends AppCompatActivity {
@@ -90,17 +86,52 @@ public class ForgotPassowrdActivity extends AppCompatActivity {
             return;
         }
 
-        User user = AppTableInfo.checkUserExist(Constants.getDataBaseObj(getApplicationContext()),
-                email, "");
-        if (user == null) {
-            input_email.setError(getString(R.string.email_not_exist));
-            return;
-        } else {
-            Toast.makeText(this, getString(R.string.pass_sent)+" "+email, Toast.LENGTH_LONG).show();
-            finish();
-        }
+        validateUser(email);
     }
 
+
+    private void validateUser(String email){
+        WebApi.showLoadingDialog(this);
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+        RequestBody body = RequestBody.create(mediaType, "email="+email);
+        Request request = new Request.Builder()
+                .url(WebApi.FORGOT_PASS)
+                .method("POST", body)
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d(Constants.TAG, "Login::onFailure::Exception: " + e);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        WebApi.dismissLoadingDialog();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                boolean result = ResponseParser.checkUserExist(response.body().string());
+                WebApi.dismissLoadingDialog();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!result) {
+                            input_email.setError(getString(R.string.email_not_exist));
+                            return;
+                        } else {
+                            WebApi.showLongToast(ForgotPassowrdActivity.this, getString(R.string.pass_sent)+" "+email);
+                            finish();
+                        }
+                    }
+                });
+            }
+        });
+    }
 }
 
 
