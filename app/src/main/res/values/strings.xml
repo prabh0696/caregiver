@@ -97,4 +97,6 @@
     <string name="booking_req_sent">Booking request sent successfully</string>
 
     <string name="search">Search</string>
+
+    <string name="delete">Delete</string>
 </resources>

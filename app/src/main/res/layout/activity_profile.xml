@@ -357,6 +357,28 @@
                         android:paddingRight="10dp"
                         android:paddingTop="2dp"
                         android:paddingBottom="5dp"/>
+
+                    <View
+                        android:id="@+id/line"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorGreyText"
+                        android:layout_marginTop="10dp"
+                        android:visibility="gone"/>
+
+                    <Button
+                        android:id="@+id/btn_action"
+                        style="@style/ThemeSmallButtonStyle"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginRight="0dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/delete"
+                        android:textColor="@color/colorWhite"
+                        android:visibility="gone"/>
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
