@@ -95,4 +95,6 @@
     <string name="update">Update</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="booking_req_sent">Booking request sent successfully</string>
+
+    <string name="search">Search</string>
 </resources>
