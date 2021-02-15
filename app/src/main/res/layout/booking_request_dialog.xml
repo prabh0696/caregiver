@@ -170,6 +170,32 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_message"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_weight=".50"
+        android:hint="@string/from_date"
+        android:theme="@style/GreyMaterialTextfield"
+        app:errorEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine|textNoSuggestions|textCapSentences"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="@color/colorPostText"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
