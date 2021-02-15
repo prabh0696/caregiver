@@ -132,10 +132,25 @@
             android:layout_marginBottom="30dp"
             android:visibility="gone"
             android:theme="@android:style/Widget.ProgressBar.Small.Inverse"
-            app:layout_constraintEnd_toStartOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/e_guideline"
+            app:layout_constraintStart_toStartOf="@+id/s_guideline"
+            app:layout_constraintTop_toBottomOf="@id/guideline"
             app:layout_constraintBottom_toTopOf="@+id/bottomBar"/>
+
+
+        <TextView
+            android:id="@+id/empty_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/empty_booking"
+            android:textColor="@color/colorPostText"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/e_guideline"
+            app:layout_constraintStart_toStartOf="@+id/s_guideline"
+            app:layout_constraintTop_toBottomOf="@id/guideline"
+            app:layout_constraintBottom_toTopOf="@+id/bottomBar"/>
+
 
         <RelativeLayout
             android:id="@+id/bottomBar"
