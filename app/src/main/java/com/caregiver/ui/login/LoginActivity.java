@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -14,18 +15,28 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.caregiver.R;
 import com.caregiver.core.Constants;
+import com.caregiver.core.ResponseParser;
 import com.caregiver.core.Utils;
+import com.caregiver.core.WebApi;
 import com.caregiver.core.models.User;
-import com.caregiver.database.AppTableInfo;
 import com.caregiver.ui.admin.AdminDashBoardActivity;
 import com.caregiver.ui.home.MainActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.io.IOException;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -111,14 +122,15 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        User user = AppTableInfo.doLogin(Constants.getDataBaseObj(getApplicationContext()),
-                email,
-                password);
+        callAPiConnection(email, password);
+    }
+
+    private void loginDone(User user) {
         if (user == null) {
             input_password.setError(getString(R.string.user_not_exist));
             return;
         } else {
-            Constants.loginUserId = user.id;
+            Constants.loginUser = user;
             if (user.User_Type == Constants.USER_TYPE_ADMIN) {
                 startActivity(new Intent(this, AdminDashBoardActivity.class));
             } else {
@@ -128,6 +140,45 @@ public class LoginActivity extends AppCompatActivity {
             }
             LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(Constants.MOVE_TO_HOME_ACTION));
         }
+    }
+
+    private void callAPiConnection(String email,
+                                   String password) {
+        WebApi.showLoadingDialog(this);
+
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+        RequestBody body = RequestBody.create(mediaType, "email="+email+"&password="+password);
+        Request request = new Request.Builder()
+                .url(WebApi.LOGIN)
+                .method("POST", body)
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d(Constants.TAG, "Login::onFailure::Exception: " + e);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        WebApi.dismissLoadingDialog();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                User user = ResponseParser.parseLoginResponse(response.body().string());
+                WebApi.dismissLoadingDialog();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loginDone(user);
+                    }
+                });
+            }
+        });
     }
 
     private BroadcastReceiver broadcastReceiver;
@@ -155,4 +206,3 @@ public class LoginActivity extends AppCompatActivity {
         super.finish();
     }
 }
-
