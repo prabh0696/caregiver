@@ -39,19 +39,20 @@ import okhttp3.Response;
 public class AdminDashBoardActivity extends AppCompatActivity {
 
     private UserListAdapter mAdapter;
+    private AppCompatSpinner cat_action_bar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
 
-        registerLocalBroadcastReciver();;
+        registerLocalBroadcastReciver();
         clickListener();
         setupViewPager();
 
     }
 
-    private void clickListener(){
+    private void clickListener() {
 
     }
 
@@ -70,7 +71,7 @@ public class AdminDashBoardActivity extends AppCompatActivity {
     }
 
     private void initializeCategoryModule() {
-        AppCompatSpinner cat_action_bar = findViewById(R.id.cat_action_bar);
+        cat_action_bar = findViewById(R.id.cat_action_bar);
         String[] categoryArray = {getString(R.string.all_user),
                 getString(R.string.parents),
                 getString(R.string.nurse),
@@ -95,14 +96,14 @@ public class AdminDashBoardActivity extends AppCompatActivity {
 
     private void fetchData(int userType) {
         WebApi.showLoadingDialog(this);
-        String userTypeStr = ""+userType;
-        if(userType == 0 ){
-            userTypeStr = Constants.USER_TYPE_GENERAL+","+Constants.USER_TYPE_NANEY+","+Constants.USER_TYPE_NURSE;
+        String userTypeStr = "" + userType;
+        if (userType == 0) {
+            userTypeStr = Constants.USER_TYPE_GENERAL + "," + Constants.USER_TYPE_NANEY + "," + Constants.USER_TYPE_NURSE;
         }
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
-        RequestBody body = RequestBody.create(mediaType, "skip_id="+Constants.loginUser.id+"&user_type="+userTypeStr);
+        RequestBody body = RequestBody.create(mediaType, "skip_id=" + Constants.loginUser.id + "&user_type=" + userTypeStr);
         Request request = new Request.Builder()
                 .url(WebApi.GET_USER_LIST)
                 .method("POST", body)
@@ -135,6 +136,7 @@ public class AdminDashBoardActivity extends AppCompatActivity {
     }
 
     private BroadcastReceiver broadcastReceiver;
+
     private void registerLocalBroadcastReciver() {
         broadcastReceiver = new BroadcastReceiver() {
 
@@ -144,16 +146,21 @@ public class AdminDashBoardActivity extends AppCompatActivity {
                 if (action.equalsIgnoreCase(Constants.MOVE_TO_LOGIN_ACTION)) {
                     startActivity(new Intent(getApplicationContext(), LoginOptionActivity.class));
                     finish();
+                } else if (action.equalsIgnoreCase(Constants.USER_DELETED)) {
+                    mAdapter.clear();
+                    fetchData(cat_action_bar.getSelectedItemPosition());
                 }
             }
         };
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Constants.MOVE_TO_LOGIN_ACTION);
+        intentFilter.addAction(Constants.USER_DELETED);
 
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(broadcastReceiver, intentFilter);
 
     }
-    public void finish(){
+
+    public void finish() {
         LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(broadcastReceiver);
         super.finish();
     }

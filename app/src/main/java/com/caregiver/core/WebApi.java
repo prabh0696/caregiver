@@ -11,7 +11,8 @@ public class WebApi {
             SIGNUP = BASE_URL + "action=register",
             UPDATE_PROFILE = BASE_URL + "action=profile",
             GET_USER_LIST = BASE_URL + "action=users",
-            ADD_BOOKING = BASE_URL + "action=add_booking";
+            ADD_BOOKING = BASE_URL + "action=add_booking",
+            DELETE_USER = BASE_URL + "action=delete_user";
 
 
     private static ProgressDialog loadingDialog;

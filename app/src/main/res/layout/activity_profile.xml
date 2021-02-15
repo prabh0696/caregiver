@@ -367,7 +367,7 @@
                         android:visibility="gone"/>
 
                     <Button
-                        android:id="@+id/btn_action"
+                        android:id="@+id/btn_delete"
                         style="@style/ThemeSmallButtonStyle"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginStart="0dp"

@@ -22,6 +22,7 @@ public class Constants {
     public static String MOVE_TO_HOME_ACTION = "Move_to_home",
             MOVE_TO_LOGIN_ACTION = "Move_to_login",
             PROFILE_UPDATED_ACTION = "profile_updated",
-            BOOKING_ADDED_ACTION = "booking_added";
+            BOOKING_ADDED_ACTION = "booking_added",
+            USER_DELETED = "user_deleted";
 
 }
