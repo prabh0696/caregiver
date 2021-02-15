@@ -278,12 +278,14 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/country"
                     android:theme="@style/GreyMaterialTextfield"
+                    android:visibility="gone"
                     app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_country"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:text="Canada"
                         android:importantForAutofill="no"
                         android:inputType="textNoSuggestions|textCapWords|textMultiLine" />
                 </com.google.android.material.textfield.TextInputLayout>
