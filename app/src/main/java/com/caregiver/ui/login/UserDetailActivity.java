@@ -3,21 +3,31 @@ package com.caregiver.ui.login;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.caregiver.ui.home.MainActivity;
 import com.caregiver.R;
 import com.caregiver.core.Constants;
+import com.caregiver.core.WebApi;
 import com.caregiver.core.models.Address;
 import com.caregiver.core.models.User;
-import com.caregiver.database.AppTableInfo;
+import com.caregiver.ui.home.MainActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.io.IOException;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 
 public class UserDetailActivity extends AppCompatActivity {
@@ -28,7 +38,6 @@ public class UserDetailActivity extends AppCompatActivity {
             et_landmark, et_address, et_street, et_city, et_state, et_country, et_pincode;
 
     private Button btn_continue;
-
     private User user;
 
     @Override
@@ -50,9 +59,6 @@ public class UserDetailActivity extends AppCompatActivity {
     }
 
     private void setupViewPager() {
-
-        user = getIntent().getParcelableExtra(Constants.key_user);
-
         btn_continue = findViewById(R.id.btn_continue);
 
         input_hourly_charges = findViewById(R.id.input_hourly_charges);
@@ -79,13 +85,28 @@ public class UserDetailActivity extends AppCompatActivity {
         et_country = findViewById(R.id.et_country);
         et_pincode = findViewById(R.id.et_pincode);
 
-        if(user.User_Type == Constants.USER_TYPE_GENERAL){
-            input_hourly_charges.setVisibility(View.GONE);
-            input_experience.setVisibility(View.GONE);
-            input_qualification.setVisibility(View.GONE);
-            input_about.setVisibility(View.GONE);
-        }
+        user = getIntent().getParcelableExtra(Constants.key_user);
+        checkForEdit();
+    }
 
+    private void checkForEdit() {
+        if (getIntent().getBooleanExtra(Constants.key_is_from_edit, false)) {
+            btn_continue.setText(R.string.update);
+            if (user != null) {
+                et_about.setText(user.about);
+                et_hourly_charges.setText(user.Charges);
+                et_experience.setText(user.Experience);
+                et_qualification.setText(user.Qualification);
+                Address addr = user.addr;
+                et_landmark.setText(addr.landmark);
+                et_address.setText(addr.Address);
+                et_street.setText(addr.Street);
+                et_city.setText(addr.City);
+                et_state.setText(addr.State);
+                et_country.setText(addr.Country);
+                et_pincode.setText(addr.Pincode);
+            }
+        }
     }
 
     private void clearError() {
@@ -106,35 +127,28 @@ public class UserDetailActivity extends AppCompatActivity {
 
     private void submitAction() {
         clearError();
+        String charges = et_hourly_charges.getText().toString().trim();
+        if (TextUtils.isEmpty(charges)) {
+            input_hourly_charges.setError(getString(R.string.empty_charges));
+            return;
+        }
 
-        String charges = "";
-        String experience = "";
-        String qualification = "";
-        String about = "";
-        if(user.User_Type != Constants.USER_TYPE_GENERAL){
-            about = et_about.getText().toString().trim();
-            if (TextUtils.isEmpty(about)) {
-                input_about.setError(getString(R.string.empty_about));
-                return;
-            }
+        String experience = et_experience.getText().toString().trim();
+        if (TextUtils.isEmpty(experience)) {
+            input_experience.setError(getString(R.string.empty_experience));
+            return;
+        }
 
-            charges = et_hourly_charges.getText().toString().trim();
-            if (TextUtils.isEmpty(charges)) {
-                input_hourly_charges.setError(getString(R.string.empty_charges));
-                return;
-            }
+        String qualification = et_qualification.getText().toString().trim();
+        if (TextUtils.isEmpty(qualification)) {
+            input_qualification.setError(getString(R.string.empty_qualification));
+            return;
+        }
 
-            experience = et_experience.getText().toString().trim();
-            if (TextUtils.isEmpty(experience)) {
-                input_experience.setError(getString(R.string.empty_experience));
-                return;
-            }
-
-            qualification = et_qualification.getText().toString().trim();
-            if (TextUtils.isEmpty(qualification)) {
-                input_qualification.setError(getString(R.string.empty_qualification));
-                return;
-            }
+        String about = et_about.getText().toString().trim();
+        if (TextUtils.isEmpty(about)) {
+            input_about.setError(getString(R.string.empty_about));
+            return;
         }
         String addr = et_address.getText().toString().trim();
         if (TextUtils.isEmpty(addr)) {
@@ -193,13 +207,74 @@ public class UserDetailActivity extends AppCompatActivity {
         address.State = state;
 
         user.addr = address;
+        submitData(user);
+    }
 
-        AppTableInfo.updateUserDetail(Constants.getDataBaseObj(getApplicationContext()),
-                user);
-        if(getIntent().getBooleanExtra(Constants.key_is_from_signup, false)){
+    private void submitData(User user) {
+
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+        RequestBody body = RequestBody.create(mediaType, "id=" + user.id
+                + "first_name=" + user.First_Name
+                + "&last_name=" + user.Last_Name
+                + "&password=" + user.Password
+                + "&user_type=" + user.User_Type
+                + "&email=" + user.Email
+                + "&phone=" + user.Phone
+                + "&photo=" + user.Photo
+                + "&charges=" + user.Charges
+                + "&experience=" + user.Experience
+                + "&qualification=" + user.Qualification
+                + "&about=" + user.about
+                + "&address=" + user.addr.Address
+                + "&landmark=" + user.addr.landmark
+                + "&street=" + user.addr.Street
+                + "&city=" + user.addr.Street
+                + "&state=" + user.addr.State
+                + "&country=" + user.addr.Country
+                + "&pincode=" + user.addr.Pincode);
+
+        Request request = new Request.Builder()
+                .url(WebApi.UPDATE_PROFILE)
+                .method("POST", body)
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d(Constants.TAG, "Signup::onFailure::Exception: " + e);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        WebApi.dismissLoadingDialog();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                WebApi.dismissLoadingDialog();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                    }
+                });
+            }
+        });
+    }
+
+    public void finish() {
+        if (getIntent().getBooleanExtra(Constants.key_is_from_signup, false)) {
             LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(Constants.MOVE_TO_HOME_ACTION));
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(UserDetailActivity.this, MainActivity.class));
+        } else {
+            Intent intent = new Intent(Constants.PROFILE_UPDATED_ACTION);
+            intent.putExtra(Constants.key_user, user);
+            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
         }
-        finish();
+        super.finish();
     }
 }

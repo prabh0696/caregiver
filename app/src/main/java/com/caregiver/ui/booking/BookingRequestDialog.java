@@ -62,6 +62,8 @@ public final class BookingRequestDialog extends Dialog {
 
     private void initializeComp() {
 
+        message = findViewById(R.id.et_message);
+
         input_from_date = findViewById(R.id.input_from_date);
         from_date = findViewById(R.id.et_from_date);
         from_date.setInputType(InputType.TYPE_NULL);

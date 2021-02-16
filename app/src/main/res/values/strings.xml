@@ -97,4 +97,13 @@
     <string name="booking_req_sent">Booking request sent successfully</string>
 
     <string name="search">Search</string>
+
+    <string name="delete">Delete</string>
+    <string name="warning_title">Warning</string>
+    <string name="warning_msg">This User will be permanently deleted. Are you sure?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="user_deleted">User has been deleted successfully</string>
+
+    <string name="empty_booking">Currently you have No booking</string>
 </resources>
