@@ -31,13 +31,19 @@ public class UserListAdapter extends RecyclerView.Adapter<UserItemView> {
     @Override
     public void onBindViewHolder(@NonNull UserItemView holder, int position) {
         holder.bind(items.get(position));
-        holder.root.setOnClickListener(v -> {
-            Utils.openProfile(v.getContext(), items.get(position));
-        });
-        holder.btn_action.setOnClickListener(v -> {
-            new BookingRequestDialog(v.getContext(), "", "").show();
+        holder.root.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.openProfile(v.getContext(), items.get(holder.getLayoutPosition()));
+            }
         });
 
+        holder.btn_action.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new BookingRequestDialog(v.getContext(), "").show();
+            }
+        });
     }
 
     public boolean addItems(List<User> list) {
@@ -45,10 +51,6 @@ public class UserListAdapter extends RecyclerView.Adapter<UserItemView> {
             items.addAll(list);
             notifyDataSetChanged();
             return true;
-        }else{
-            for(int i =0; i < 5; i++){
-                items.add(new User());
-            }
         }
         return false;
     }
