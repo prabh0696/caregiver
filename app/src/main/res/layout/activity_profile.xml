@@ -240,6 +240,7 @@
                     </RelativeLayout>
 
                     <TextView
+                        android:id="@+id/aboutLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/about_self"
@@ -263,6 +264,7 @@
                         android:paddingBottom="5dp"/>
 
                     <TextView
+                        android:id="@+id/qualificationLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/qualification"
@@ -287,6 +289,7 @@
 
 
                     <TextView
+                        android:id="@+id/experienceLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/experience"
@@ -310,6 +313,7 @@
                         android:paddingBottom="5dp"/>
 
                     <TextView
+                        android:id="@+id/chargesLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/hourly_charges"

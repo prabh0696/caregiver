@@ -24,14 +24,12 @@ import com.caregiver.ui.search.SearchActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        user = getIntent().getParcelableExtra(Constants.key_user);
         registerLocalBroadcastReciver();
 
         clickListener();
@@ -65,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 Intent intent = new Intent(view.getContext(), ProfileActivity.class);
-                intent.putExtra(Constants.key_user, user);
+                intent.putExtra(Constants.key_user, Constants.loginUser);
                 startActivity(intent);
             }
         });
@@ -91,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), LoginOptionActivity.class));
                     finish();
                 } else if (action.equalsIgnoreCase(Constants.PROFILE_UPDATED_ACTION)) {
-                    user = intent.getParcelableExtra(Constants.key_user);
+                    Constants.loginUser = intent.getParcelableExtra(Constants.key_user);
                 } else if (action.equalsIgnoreCase(Constants.BOOKING_ADDED_ACTION)) {
                 }
             }

@@ -274,7 +274,7 @@ public class SignupActivity extends AppCompatActivity implements BSImagePicker.O
         } else {
             url = WebApi.UPDATE_PROFILE;
             body = RequestBody.create(mediaType, "id=" + user.id
-                    +"first_name=" + user.First_Name
+                    +"&first_name=" + user.First_Name
                     + "&last_name=" + user.Last_Name
                     + "&password=" + user.Password
                     + "&user_type=" + user.User_Type
@@ -328,17 +328,19 @@ public class SignupActivity extends AppCompatActivity implements BSImagePicker.O
                         }
                     });
                 }else{
-                    User user = ResponseParser.parseSignupResponse(response.body().string());
+                    User user1 = ResponseParser.parseSignupResponse(response.body().string());
                     WebApi.dismissLoadingDialog();
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if(user == null){
+                            if(user1 == null){
                                 input_email.setError(getString(R.string.email_exist));
                             }else {
+                                user1.Password = user.Password;
+                                Constants.loginUser = user1;
                                 Intent intent = new Intent(SignupActivity.this, UserDetailActivity.class);
                                 intent.putExtra(Constants.key_is_from_signup, true);
-                                intent.putExtra(Constants.key_user, user);
+                                intent.putExtra(Constants.key_user, user1);
                                 startActivity(intent);
                                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(Constants.MOVE_TO_HOME_ACTION));
                             }

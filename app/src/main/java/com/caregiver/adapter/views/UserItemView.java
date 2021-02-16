@@ -55,17 +55,21 @@ public class UserItemView extends RecyclerView.ViewHolder {
                 .into(user_image);
         user_name.setText((pi.First_Name + " " + pi.Last_Name).trim());
         if (pi.User_Type != Constants.USER_TYPE_GENERAL) {
-            charges.setText(pi.Charges);
+            charges.setText(itemView.getContext().getString(R.string.hourly_charges)+": " + pi.Charges + " CAD");
             about.setText(pi.about);
 
+            about.setVisibility(View.VISIBLE);
             charges.setVisibility(View.VISIBLE);
             reviews.setVisibility(View.VISIBLE);
         } else {
             charges.setVisibility(View.GONE);
-            about.setText("");
+            about.setVisibility(View.GONE);
             reviews.setVisibility(View.GONE);
         }
         designation.setText(getDesignation(pi.User_Type));
+        if(Constants.loginUser.User_Type != Constants.USER_TYPE_ADMIN){
+            btn_action.setVisibility(View.VISIBLE);
+        }
     }
 
     private String getDesignation(int usertype) {

@@ -59,6 +59,9 @@ public class UserDetailActivity extends AppCompatActivity {
     }
 
     private void setupViewPager() {
+
+        user = getIntent().getParcelableExtra(Constants.key_user);
+        Constants.loginUser = user;
         btn_continue = findViewById(R.id.btn_continue);
 
         input_hourly_charges = findViewById(R.id.input_hourly_charges);
@@ -85,7 +88,13 @@ public class UserDetailActivity extends AppCompatActivity {
         et_country = findViewById(R.id.et_country);
         et_pincode = findViewById(R.id.et_pincode);
 
-        user = getIntent().getParcelableExtra(Constants.key_user);
+
+        if(user.User_Type == Constants.USER_TYPE_GENERAL){
+            input_hourly_charges.setVisibility(View.GONE);
+            input_experience.setVisibility(View.GONE);
+            input_qualification.setVisibility(View.GONE);
+            input_about.setVisibility(View.GONE);
+        }
         checkForEdit();
     }
 
@@ -127,28 +136,37 @@ public class UserDetailActivity extends AppCompatActivity {
 
     private void submitAction() {
         clearError();
-        String charges = et_hourly_charges.getText().toString().trim();
-        if (TextUtils.isEmpty(charges)) {
-            input_hourly_charges.setError(getString(R.string.empty_charges));
-            return;
-        }
 
-        String experience = et_experience.getText().toString().trim();
-        if (TextUtils.isEmpty(experience)) {
-            input_experience.setError(getString(R.string.empty_experience));
-            return;
-        }
+        String charges = "";
+        String experience = "";
+        String qualification = "";
+        String about = "";
 
-        String qualification = et_qualification.getText().toString().trim();
-        if (TextUtils.isEmpty(qualification)) {
-            input_qualification.setError(getString(R.string.empty_qualification));
-            return;
-        }
+        if(user.User_Type != Constants.USER_TYPE_GENERAL) {
+            charges = et_hourly_charges.getText().toString().trim();
+            if (TextUtils.isEmpty(charges)) {
+                input_hourly_charges.setError(getString(R.string.empty_charges));
+                return;
+            }
 
-        String about = et_about.getText().toString().trim();
-        if (TextUtils.isEmpty(about)) {
-            input_about.setError(getString(R.string.empty_about));
-            return;
+            experience = et_experience.getText().toString().trim();
+            if (TextUtils.isEmpty(experience)) {
+                input_experience.setError(getString(R.string.empty_experience));
+                return;
+            }
+
+            qualification = et_qualification.getText().toString().trim();
+            if (TextUtils.isEmpty(qualification)) {
+                input_qualification.setError(getString(R.string.empty_qualification));
+                return;
+            }
+
+            about = et_about.getText().toString().trim();
+            if (TextUtils.isEmpty(about)) {
+                input_about.setError(getString(R.string.empty_about));
+                return;
+            }
+
         }
         String addr = et_address.getText().toString().trim();
         if (TextUtils.isEmpty(addr)) {
@@ -212,11 +230,10 @@ public class UserDetailActivity extends AppCompatActivity {
 
     private void submitData(User user) {
 
-        OkHttpClient client = new OkHttpClient().newBuilder()
-                .build();
-        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
-        RequestBody body = RequestBody.create(mediaType, "id=" + user.id
-                + "first_name=" + user.First_Name
+        Constants.loginUser = user;
+
+        String postData = "id=" + user.id
+                + "&first_name=" + user.First_Name
                 + "&last_name=" + user.Last_Name
                 + "&password=" + user.Password
                 + "&user_type=" + user.User_Type
@@ -230,7 +247,30 @@ public class UserDetailActivity extends AppCompatActivity {
                 + "&address=" + user.addr.Address
                 + "&landmark=" + user.addr.landmark
                 + "&street=" + user.addr.Street
-                + "&city=" + user.addr.Street
+                + "&city=" + user.addr.City
+                + "&state=" + user.addr.State
+                + "&country=" + user.addr.Country
+                + "&pincode=" + user.addr.Pincode;
+        Log.d(Constants.TAG, "postData = " + postData);
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+        RequestBody body = RequestBody.create(mediaType, "id=" + user.id
+                + "&first_name=" + user.First_Name
+                + "&last_name=" + user.Last_Name
+                + "&password=" + user.Password
+                + "&user_type=" + user.User_Type
+                + "&email=" + user.Email
+                + "&phone=" + user.Phone
+                + "&photo=" + user.Photo
+                + "&charges=" + user.Charges
+                + "&experience=" + user.Experience
+                + "&qualification=" + user.Qualification
+                + "&about=" + user.about
+                + "&address=" + user.addr.Address
+                + "&landmark=" + user.addr.landmark
+                + "&street=" + user.addr.Street
+                + "&city=" + user.addr.City
                 + "&state=" + user.addr.State
                 + "&country=" + user.addr.Country
                 + "&pincode=" + user.addr.Pincode);
@@ -244,7 +284,7 @@ public class UserDetailActivity extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.d(Constants.TAG, "Signup::onFailure::Exception: " + e);
+                Log.d(Constants.TAG, "userDetail::onFailure::Exception: " + e);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -256,6 +296,7 @@ public class UserDetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 WebApi.dismissLoadingDialog();
+                Log.d(Constants.TAG, "onResponse::response.body().string() = " + response.body().string());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
