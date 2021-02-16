@@ -106,12 +106,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/all_user"
+                        android:checked="true"
                         android:layout_marginLeft="10dp"
                         android:layout_marginStart="10dp"
                         android:theme="@style/radioStyle"/>
 
                     <RadioButton
-                        android:id="@+id/radio_nany"
+                        android:id="@+id/radio_nanny"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/nanny"
