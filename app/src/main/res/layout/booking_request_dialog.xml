@@ -172,13 +172,11 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_message"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_weight=".50"
-        android:hint="@string/from_date"
+        android:layout_below="@id/timeView"
+        android:hint="@string/message"
         android:theme="@style/GreyMaterialTextfield"
         app:errorEnabled="true">
 
@@ -199,7 +197,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/timeView"
+        android:layout_below="@id/input_message"
         android:layout_alignParentRight="true"
         android:layout_marginTop="20dp">
 
