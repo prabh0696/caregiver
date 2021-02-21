@@ -27,6 +27,7 @@ public final class ResponseParser {
             user.id = obj.getInt("id");
             user.First_Name = obj.getString("first_name");
             user.Last_Name = obj.getString("last_name");
+            user.Password = obj.getString("password");
             user.User_Type = obj.getInt("user_type");
             user.Email = obj.getString("email");
             user.Phone = obj.getString("phone");
@@ -65,6 +66,7 @@ public final class ResponseParser {
             user.id = obj.getInt("id");
             user.First_Name = obj.getString("first_name");
             user.Last_Name = obj.getString("last_name");
+            user.Password = obj.getString("password");
             user.User_Type = obj.getInt("user_type");
             user.Email = obj.getString("email");
             user.Phone = obj.getString("phone");

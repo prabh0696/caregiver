@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -150,6 +151,7 @@ public class SignupActivity extends AppCompatActivity implements BSImagePicker.O
             findViewById(R.id.iv_header).setVisibility(View.GONE);
             input_conform_password.setVisibility(View.GONE);
             input_password.setVisibility(View.GONE);
+            et_email.setInputType(InputType.TYPE_NULL);
             user = getIntent().getParcelableExtra(Constants.key_user);
             if (user != null) {
                 et_fname.setText(user.First_Name);
@@ -336,7 +338,6 @@ public class SignupActivity extends AppCompatActivity implements BSImagePicker.O
                             if(user1 == null){
                                 input_email.setError(getString(R.string.email_exist));
                             }else {
-                                user1.Password = user.Password;
                                 Constants.loginUser = user1;
                                 Intent intent = new Intent(SignupActivity.this, UserDetailActivity.class);
                                 intent.putExtra(Constants.key_is_from_signup, true);

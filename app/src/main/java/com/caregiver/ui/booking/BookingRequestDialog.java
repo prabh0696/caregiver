@@ -70,14 +70,14 @@ public final class BookingRequestDialog extends Dialog {
         from_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDatePicker(false);
+                showDatePicker(true);
             }
         });
         from_date.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    showDatePicker(false);
+                    showDatePicker(true);
                 }
             }
         });
@@ -217,6 +217,10 @@ public final class BookingRequestDialog extends Dialog {
 
 
     private void showDatePicker(final boolean isFromDate) {
+
+        input_from_date.setError(null);
+        input_to_date.setError(null);
+
         int resourceID = R.string.from_date;
         int yyyy = fromYear, dd = fromDate, mm = fromMonth;
         if (!isFromDate) {
@@ -238,7 +242,7 @@ public final class BookingRequestDialog extends Dialog {
                     }
                 } else if (!isFromDate) {
                     if (isBeforeFromDate(dayOfMonth, monthOfYear, year)) {
-                        input_from_date.setError(mContext.getString(R.string.error_to_date));
+                        input_to_date.setError(mContext.getString(R.string.error_to_date));
                         return;
                     }
                 }
@@ -319,6 +323,10 @@ public final class BookingRequestDialog extends Dialog {
     }
 
     private void openTimePicker(boolean isFrom) {
+
+        input_from_time.setError(null);
+        input_to_time.setError(null);
+
         TimePickerDialog mTimePicker;
 
         final Calendar c = Calendar.getInstance();

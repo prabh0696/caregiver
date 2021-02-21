@@ -41,10 +41,11 @@ public class UserListAdapter extends RecyclerView.Adapter<UserItemView> {
         holder.btn_action.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new BookingRequestDialog(v.getContext(), "").show();
+                new BookingRequestDialog(v.getContext(), ""+items.get(holder.getLayoutPosition()).id).show();
             }
         });
     }
+
 
     public boolean addItems(List<User> list) {
         if (list != null && !list.isEmpty()) {

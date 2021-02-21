@@ -136,7 +136,8 @@ public class ProfileActivity extends AppCompatActivity {
                 findViewById(R.id.line).setVisibility(View.VISIBLE);
                 btnDelete.setVisibility(View.VISIBLE);
             }
-            if(Constants.loginUser.User_Type == Constants.USER_TYPE_GENERAL){
+
+            if(user.User_Type == Constants.USER_TYPE_GENERAL){
                 findViewById(R.id.chargesLabel).setVisibility(View.GONE);
                 findViewById(R.id.aboutLabel).setVisibility(View.GONE);
                 findViewById(R.id.experienceLabel).setVisibility(View.GONE);
