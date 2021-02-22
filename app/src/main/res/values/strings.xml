@@ -106,4 +106,7 @@
     <string name="user_deleted">User has been deleted successfully</string>
     <string name="empty_booking">Currently you have No booking</string>
     <string name="message">Message</string>
+
+    <string name="review">Review</string>
+    <string name="comment">Comment</string>
 </resources>
