@@ -109,4 +109,10 @@
 
     <string name="review">Review</string>
     <string name="comment">Comment</string>
+
+    <string name="booking">Booking</string>
+    <string name="timing">Timing</string>
+    <string name="accept">Accept</string>
+    <string name="end_contract">End Contract</string>
+    <string name="feedback">Feedback</string>
 </resources>
