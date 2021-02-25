@@ -51,5 +51,87 @@ public class BookingItemView extends RecyclerView.ViewHolder {
         requestOptions.diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
     }
 
+    public void bind(Booking pi) {
+        String loginUserId = String.valueOf(Constants.loginUser.id);
+        int statusInt = Integer.parseInt(pi.booking_status);
+        if (loginUserId.equalsIgnoreCase(pi.from_user_id)) {
+            user_name.setText(pi.to_first_name + " " + pi.to_last_name);
+            phone.setText(itemView.getContext().getString(R.string.phone) + " :" + pi.to_phone);
+            email.setText(itemView.getContext().getString(R.string.email1) + " :" + pi.to_email);
 
+            if (statusInt == Constants.BOOKING_STATUS_PENDING) {
+                btnAction.setText(itemView.getContext().getString(R.string.cancel));
+                btnAction.setVisibility(View.VISIBLE);
+                btn_accept.setVisibility(View.GONE);
+            } else if (statusInt == Constants.BOOKING_STATUS_ACCEPTED) {
+                btnAction.setText(itemView.getContext().getString(R.string.end_contract));
+                btnAction.setVisibility(View.VISIBLE);
+                btn_accept.setVisibility(View.GONE);
+            } else {
+                btnAction.setVisibility(View.GONE);
+                btn_accept.setVisibility(View.GONE);
+            }
+
+            if (hasReview(pi.review_id)) {
+                btnReview.setVisibility(View.GONE);
+            } else {
+                btnReview.setVisibility(View.VISIBLE);
+            }
+
+        } else if (loginUserId.equalsIgnoreCase(pi.to_user_id)) {
+            user_name.setText(pi.from_first_name + " " + pi.from_last_name);
+            phone.setText(itemView.getContext().getString(R.string.phone) + " :" + pi.from_phone);
+            email.setText(itemView.getContext().getString(R.string.email1) + " :" + pi.from_email);
+            if (statusInt == Constants.BOOKING_STATUS_PENDING) {
+                btnAction.setText(itemView.getContext().getString(R.string.reject));
+                btn_accept.setVisibility(View.VISIBLE);
+                btnAction.setVisibility(View.VISIBLE);
+            } else if (statusInt == Constants.BOOKING_STATUS_ACCEPTED) {
+                btnAction.setText(itemView.getContext().getString(R.string.end_contract));
+                btnAction.setVisibility(View.VISIBLE);
+                btn_accept.setVisibility(View.GONE);
+            } else {
+                btnAction.setVisibility(View.GONE);
+                btn_accept.setVisibility(View.GONE);
+            }
+        }
+
+        if (!TextUtils.isEmpty(pi.booking_message)) {
+            message.setVisibility(View.VISIBLE);
+            messageLabel.setVisibility(View.VISIBLE);
+            message.setText(pi.booking_message);
+        } else {
+            messageLabel.setVisibility(View.GONE);
+            message.setVisibility(View.GONE);
+        }
+        setBookingStatus(statusInt);
+        booking_request.setText(itemView.getContext().getString(R.string.booking_request_on) + " " + pi.booked_date);
+        date.setText(pi.from_date + " - " + pi.to_date);
+        timeing.setText(pi.from_time + " - " + pi.to_time);
+
+    }
+
+    private void setBookingStatus(int statusInt) {
+        if (statusInt == Constants.BOOKING_STATUS_PENDING) {
+            status.setText(itemView.getContext().getString(R.string.pending));
+        } else if (statusInt == Constants.BOOKING_STATUS_ACCEPTED) {
+            status.setText(itemView.getContext().getString(R.string.on_going));
+        } else if (statusInt == Constants.BOOKING_STATUS_COMPLETED) {
+            status.setText(itemView.getContext().getString(R.string.completed));
+        } else if (statusInt == Constants.BOOKING_STATUS_CANCELED) {
+            status.setText(itemView.getContext().getString(R.string.canceled));
+        } else if (statusInt == Constants.BOOKING_STATUS_REJECTED) {
+            status.setText(itemView.getContext().getString(R.string.rejected));
+        }
+    }
+
+    private boolean hasReview(String id) {
+        if (id != null && !id.equalsIgnoreCase("null")) {
+            int rId = Integer.parseInt(id);
+            if (rId > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

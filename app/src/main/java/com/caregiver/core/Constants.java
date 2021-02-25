@@ -25,4 +25,10 @@ public class Constants {
             BOOKING_ADDED_ACTION = "booking_added",
             USER_DELETED = "user_deleted";
 
+    public static int BOOKING_STATUS_PENDING = 1,
+            BOOKING_STATUS_ACCEPTED = 2,
+            BOOKING_STATUS_COMPLETED = 3,
+            BOOKING_STATUS_REJECTED = 4,
+            BOOKING_STATUS_CANCELED = 5;
+
 }

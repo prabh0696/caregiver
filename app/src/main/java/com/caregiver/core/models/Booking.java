@@ -2,6 +2,7 @@ package com.caregiver.core.models;
 
 public class Booking {
     public String booking_id,
+            review_id,
             from_user_id,
             to_user_id,
             from_date,
