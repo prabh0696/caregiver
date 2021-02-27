@@ -1,4 +1,4 @@
-package com.caregiver.adapter.views;
+package com.caregiver.adapter;
 
 import android.content.Context;
 import android.content.Intent;
