@@ -23,7 +23,8 @@ public class Constants {
             MOVE_TO_LOGIN_ACTION = "Move_to_login",
             PROFILE_UPDATED_ACTION = "profile_updated",
             BOOKING_ADDED_ACTION = "booking_added",
-            USER_DELETED = "user_deleted";
+            USER_DELETED = "user_deleted",
+            FEEDBACK_SUBMITTED_ACTION = "feedback_submitted";
 
     public static int BOOKING_STATUS_PENDING = 1,
             BOOKING_STATUS_ACCEPTED = 2,

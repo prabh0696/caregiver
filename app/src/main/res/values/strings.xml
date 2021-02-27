@@ -126,4 +126,7 @@
     <string name="completed">Completed</string>
     <string name="on_going">On going</string>
     <string name="rejected">Rejected</string>
+
+    <string name="empty_comment">Enter comment</string>
+    <string name="feedback_submit">Feeback submitted successfully</string>
 </resources>
