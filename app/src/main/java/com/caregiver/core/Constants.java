@@ -15,6 +15,7 @@ public class Constants {
     public static String TAG = "req_tag",
             key_user_type = "user_type",
             key_user = "user",
+            key_user_id = "user_id",
             key_is_from_signup = "is_from_signup",
             key_is_from_edit = "is_from_edit";
 
