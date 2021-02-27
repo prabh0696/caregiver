@@ -3,6 +3,7 @@ package com.caregiver.core;
 import android.util.Log;
 
 import com.caregiver.core.models.Address;
+import com.caregiver.core.models.Booking;
 import com.caregiver.core.models.User;
 
 import org.json.JSONArray;
@@ -147,5 +148,45 @@ public final class ResponseParser {
         return true;
     }
 
+    public static List<Booking> parseBookingList(String response) {
+        Log.d("file_tag", "parseApiStatus::response = " + response);
+        List<Booking> list = new ArrayList<>();
+        try {
+            JSONObject jObj = new JSONObject(response);
+            JSONArray jArr = jObj.getJSONArray("data");
+            for (int i = 0; i < jArr.length(); i++) {
+                JSONObject obj = jArr.getJSONObject(i);
+                Booking pi = new Booking();
+                pi.booking_id = obj.getString("booking_id");
+                pi.review_id = obj.getString("review_id");
+                pi.booked_date = obj.getString("booked_date");
+                pi.booking_message = obj.getString("booking_message");
+                pi.booking_status = obj.getString("booking_status");
 
+                pi.from_date = obj.getString("from_date");
+                pi.from_time = obj.getString("from_time");
+                pi.from_email = obj.getString("from_email");
+                pi.from_first_name = obj.getString("from_first_name");
+                pi.from_last_name = obj.getString("from_last_name");
+                pi.from_phone = obj.getString("from_phone");
+                pi.from_user_id = obj.getString("from_user_id");
+                pi.from_photo = obj.getString("from_photo");
+
+                pi.to_date = obj.getString("to_date");
+                pi.to_time = obj.getString("to_time");
+                pi.to_email = obj.getString("to_email");
+                pi.to_first_name = obj.getString("to_first_name");
+                pi.to_last_name = obj.getString("to_last_name");
+                pi.to_phone = obj.getString("to_phone");
+                pi.to_user_id = obj.getString("to_user_id");
+                pi.to_photo = obj.getString("to_photo");
+
+                list.add(pi);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Exception: " + e + " ::ResponseParser::parseBookingList");
+        }
+        return list;
+    }
 }
