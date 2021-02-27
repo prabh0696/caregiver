@@ -21,8 +21,8 @@ import com.caregiver.core.models.User;
 import com.caregiver.ui.login.SignupActivity;
 import com.caregiver.ui.login.UserDetailActivity;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -43,7 +43,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView user_name, phone, email, about, qualification, experience, charges, address;
 
     private User user;
-    private Button editInfoButton, editButton, btnDelete;
+    private Button editInfoButton, editButton, changePassButton, btnDelete, btnReview;
 
     private BroadcastReceiver broadcastReceiver;
 
@@ -81,6 +81,14 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        changePassButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+            }
+        });
+
+
         findViewById(R.id.ib_back_toolbar).setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -96,10 +104,19 @@ public class ProfileActivity extends AppCompatActivity {
                 confirmationDialog(view.getContext());
             }
         });
+
+        btnReview.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+            }
+        });
     }
 
     private void setupViewPager() {
+        btnReview = findViewById(R.id.btn_review);
         btnDelete = findViewById(R.id.btn_delete);
+        changePassButton = findViewById(R.id.changePassButton);
         editInfoButton = findViewById(R.id.editInfoButton);
         editButton = findViewById(R.id.editButton);
 
@@ -112,17 +129,26 @@ public class ProfileActivity extends AppCompatActivity {
         experience = findViewById(R.id.experience);
         charges = findViewById(R.id.charges);
         address = findViewById(R.id.address);
-        setUserData(getIntent().getParcelableExtra(Constants.key_user));
+
+        User pi = getIntent().getParcelableExtra(Constants.key_user);
+        if (pi != null) {
+            setUserData(pi);
+        } else {
+            fetchUserData(getIntent().getStringExtra(Constants.key_user_id));
+        }
+
     }
 
     private void setUserData(User pi) {
         user = pi;
         if (user != null) {
-            if(Constants.loginUser.id != user.id){
+            if (Constants.loginUser.id != user.id) {
                 editInfoButton.setVisibility(View.GONE);
                 editButton.setVisibility(View.GONE);
+                changePassButton.setVisibility(View.GONE);
+                btnReview.setVisibility(View.VISIBLE);
             }
-            user_name.setText(user.First_Name+" "+user.Last_Name);
+            user_name.setText(user.First_Name + " " + user.Last_Name);
             phone.setText(user.Phone);
             email.setText(user.Email);
             experience.setText(user.Experience + " Yrs");
@@ -132,12 +158,12 @@ public class ProfileActivity extends AppCompatActivity {
             address.setText(user.addr.getAddressAsString());
             setUserImage(user.Photo);
 
-            if(Constants.loginUser.User_Type == Constants.USER_TYPE_ADMIN){
+            if (Constants.loginUser.User_Type == Constants.USER_TYPE_ADMIN) {
                 findViewById(R.id.line).setVisibility(View.VISIBLE);
                 btnDelete.setVisibility(View.VISIBLE);
             }
 
-            if(user.User_Type == Constants.USER_TYPE_GENERAL){
+            if (user.User_Type == Constants.USER_TYPE_GENERAL) {
                 findViewById(R.id.chargesLabel).setVisibility(View.GONE);
                 findViewById(R.id.aboutLabel).setVisibility(View.GONE);
                 findViewById(R.id.experienceLabel).setVisibility(View.GONE);
@@ -147,11 +173,15 @@ public class ProfileActivity extends AppCompatActivity {
                 charges.setVisibility(View.GONE);
                 about.setVisibility(View.GONE);
                 qualification.setVisibility(View.GONE);
+                btnReview.setVisibility(View.GONE);
             }
         }
     }
 
     private void setUserImage(String path) {
+        if(!new File(path).exists()){
+            path = WebApi.IMAGE_BASE_URL+path;
+        }
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.dontAnimate();
         requestOptions.placeholder(R.drawable.ic_user_profile);
@@ -188,7 +218,7 @@ public class ProfileActivity extends AppCompatActivity {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
-        RequestBody body = RequestBody.create(mediaType, "id="+user.id);
+        RequestBody body = RequestBody.create(mediaType, "id=" + user.id);
         Request request = new Request.Builder()
                 .url(WebApi.DELETE_USER)
                 .method("POST", body)
@@ -215,6 +245,45 @@ public class ProfileActivity extends AppCompatActivity {
                         WebApi.showLongToast(ProfileActivity.this, getString(R.string.user_deleted));
                         finish();
                         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(Constants.USER_DELETED));
+                    }
+                });
+            }
+        });
+    }
+
+    private void fetchUserData(String userId) {
+        WebApi.showLoadingDialog(this);
+
+        Log.d(Constants.TAG, "userId=" + userId);
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+        RequestBody body = RequestBody.create(mediaType, "id=" + userId);
+        Request request = new Request.Builder()
+                .url(WebApi.USER_DETAIL)
+                .method("POST", body)
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d(Constants.TAG, "Login::onFailure::Exception: " + e);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        WebApi.dismissLoadingDialog();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                User pi = ResponseParser.parseSignupResponse(response.body().string());
+                WebApi.dismissLoadingDialog();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setUserData(pi);
                     }
                 });
             }
