@@ -129,4 +129,6 @@
 
     <string name="empty_comment">Enter comment</string>
     <string name="feedback_submit">Feeback submitted successfully</string>
+
+    <string name="book_now">Book Now</string>
 </resources>
