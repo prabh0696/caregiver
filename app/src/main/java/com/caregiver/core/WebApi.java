@@ -17,6 +17,7 @@ public class WebApi {
             UPDATE_BOOKING = BASE_URL + "action=update_booking",
             DELETE_USER = BASE_URL + "action=delete_user",
             ADD_REVIEW = BASE_URL + "action=add_review",
+            GET_ALL_REVIEW = BASE_URL + "action=all_reviews",
             USER_DETAIL = BASE_URL + "action=user_detail";
 
 
