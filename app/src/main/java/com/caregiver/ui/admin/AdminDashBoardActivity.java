@@ -14,6 +14,7 @@ import com.caregiver.R;
 import com.caregiver.adapter.UserListAdapter;
 import com.caregiver.core.Constants;
 import com.caregiver.core.ResponseParser;
+import com.caregiver.core.Utils;
 import com.caregiver.core.WebApi;
 import com.caregiver.core.models.User;
 import com.caregiver.ui.login.LoginOptionActivity;
@@ -53,7 +54,12 @@ public class AdminDashBoardActivity extends AppCompatActivity {
     }
 
     private void clickListener() {
-
+        findViewById(R.id.logout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utils.logout(view.getContext());
+            }
+        });
     }
 
     private void setupViewPager() {

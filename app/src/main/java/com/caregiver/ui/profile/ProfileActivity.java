@@ -18,11 +18,14 @@ import com.caregiver.core.Constants;
 import com.caregiver.core.ResponseParser;
 import com.caregiver.core.WebApi;
 import com.caregiver.core.models.User;
+import com.caregiver.ui.login.ChangePasswordActivity;
 import com.caregiver.ui.login.SignupActivity;
 import com.caregiver.ui.login.UserDetailActivity;
+import com.caregiver.ui.reviews.ReviewActivity;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -85,6 +88,9 @@ public class ProfileActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), ChangePasswordActivity.class);
+                intent.putExtra(Constants.key_user, user);
+                startActivity(intent);
             }
         });
 
@@ -109,6 +115,9 @@ public class ProfileActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), ReviewActivity.class);
+                intent.putExtra(Constants.key_user_id, "" + user.id);
+                startActivity(intent);
             }
         });
     }
