@@ -116,6 +116,7 @@ public final class ResponseParser {
                 user.Experience = obj.getString("experience");
                 user.Qualification = obj.getString("qualification");
                 user.about = obj.getString("about");
+                user.availability = obj.getInt("availability");
 
                 Address address = new Address();
                 address.Address = obj.getString("address");

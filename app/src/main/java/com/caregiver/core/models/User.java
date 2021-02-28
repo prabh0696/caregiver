@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class User implements Parcelable {
-    public int id, User_Type, reviewsCount;
+    public int id, User_Type, reviewsCount, availability;
     public String First_Name = "",
             Last_Name = "",
             Password = "",
@@ -18,12 +18,14 @@ public class User implements Parcelable {
 
     public Address addr = new Address();
 
-    public User(){}
+    public User() {
+    }
 
     protected User(Parcel in) {
         id = in.readInt();
         User_Type = in.readInt();
         reviewsCount = in.readInt();
+        availability = in.readInt();
         First_Name = in.readString();
         Last_Name = in.readString();
         Password = in.readString();
@@ -59,6 +61,7 @@ public class User implements Parcelable {
         parcel.writeInt(id);
         parcel.writeInt(User_Type);
         parcel.writeInt(reviewsCount);
+        parcel.writeInt(availability);
         parcel.writeString(First_Name);
         parcel.writeString(Last_Name);
         parcel.writeString(Password);
