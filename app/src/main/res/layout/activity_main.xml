@@ -194,7 +194,7 @@
                     android:id="@+id/btn_profile"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".50"
+                    android:layout_weight=".33"
                     android:layout_gravity="center_vertical"
                     android:orientation="vertical">
 
@@ -217,10 +217,37 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/btn_refresh"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".33"
+                    android:orientation="vertical"
+                    android:layout_gravity="center">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center_horizontal"
+                        app:srcCompat="@drawable/ic_refresh"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="@string/refresh"
+                        android:textColor="@color/colorPostText"
+                        android:textSize="10sp"
+                        android:layout_marginTop="2dp"
+                        android:textStyle="normal" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
                     android:id="@+id/btn_logout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".50"
+                    android:layout_weight=".33"
                     android:orientation="vertical"
                     android:layout_gravity="center">
 

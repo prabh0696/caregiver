@@ -13,6 +13,7 @@ public class WebApi {
             UPDATE_PROFILE = BASE_URL + "action=profile",
             GET_USER_LIST = BASE_URL + "action=users",
             ADD_BOOKING = BASE_URL + "action=add_booking",
+            GET_BOOKING_LIST = BASE_URL + "action=all_bookings",
             UPDATE_BOOKING = BASE_URL + "action=update_booking",
             DELETE_USER = BASE_URL + "action=delete_user",
             ADD_REVIEW = BASE_URL + "action=add_review",

@@ -132,4 +132,6 @@
 
     <string name="book_now">Book Now</string>
     <string name="change_password">Change Password</string>
+
+    <string name="refresh">Refresh</string>
 </resources>

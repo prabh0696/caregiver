@@ -6,25 +6,39 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
 import com.caregiver.R;
 import com.caregiver.adapter.BookingListAdapter;
 import com.caregiver.core.Constants;
+import com.caregiver.core.ResponseParser;
 import com.caregiver.core.Utils;
-import com.caregiver.core.models.User;
+import com.caregiver.core.WebApi;
+import com.caregiver.core.models.Booking;
 import com.caregiver.ui.login.LoginOptionActivity;
 import com.caregiver.ui.profile.ProfileActivity;
 import com.caregiver.ui.search.SearchActivity;
 
+import java.io.IOException;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
-    private User user;
     private BookingListAdapter mAdapter;
 
     @Override
@@ -32,11 +46,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        user = getIntent().getParcelableExtra(Constants.key_user);
         registerLocalBroadcastReciver();
 
         clickListener();
         setupViewPager();
+        fetchData();
     }
 
     private void clickListener() {
@@ -74,10 +88,18 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 Intent intent = new Intent(view.getContext(), ProfileActivity.class);
-                intent.putExtra(Constants.key_user, user);
+                intent.putExtra(Constants.key_user, Constants.loginUser);
                 startActivity(intent);
             }
         });
+
+        findViewById(R.id.btn_refresh).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                refresh();
+            }
+        });
+
     }
 
     private void setupViewPager() {
@@ -92,6 +114,55 @@ public class MainActivity extends AppCompatActivity {
         rvList.setAdapter(mAdapter);
     }
 
+    private void fetchData() {
+        findViewById(R.id.empty_list).setVisibility(View.GONE);
+        WebApi.showLoadingDialog(this);
+
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+        RequestBody body = RequestBody.create(mediaType, "user_id=" + Constants.loginUser.id);
+        Request request = new Request.Builder()
+                .url(WebApi.GET_BOOKING_LIST)
+                .method("POST", body)
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d(Constants.TAG, "Login::onFailure::Exception: " + e);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        WebApi.dismissLoadingDialog();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                List<Booking> list = ResponseParser.parseBookingList(response.body().string());
+                WebApi.dismissLoadingDialog();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.addItems(list);
+                        if (mAdapter.getItemCount() == 0) {
+                            findViewById(R.id.empty_list).setVisibility(View.VISIBLE);
+                        } else {
+                            findViewById(R.id.empty_list).setVisibility(View.GONE);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private void refresh() {
+        mAdapter.clear();
+        fetchData();
+    }
+
     private BroadcastReceiver broadcastReceiver;
 
     private void registerLocalBroadcastReciver() {
@@ -104,11 +175,11 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), LoginOptionActivity.class));
                     finish();
                 } else if (action.equalsIgnoreCase(Constants.PROFILE_UPDATED_ACTION)) {
-                    user = intent.getParcelableExtra(Constants.key_user);
+                    Constants.loginUser = intent.getParcelableExtra(Constants.key_user);
                 } else if (action.equalsIgnoreCase(Constants.BOOKING_ADDED_ACTION)) {
-                    mAdapter.clear();
-                }else if (action.equalsIgnoreCase(Constants.FEEDBACK_SUBMITTED_ACTION)) {
-                    mAdapter.clear();
+                    refresh();
+                } else if (action.equalsIgnoreCase(Constants.FEEDBACK_SUBMITTED_ACTION)) {
+                    refresh();
                 }
             }
         };
