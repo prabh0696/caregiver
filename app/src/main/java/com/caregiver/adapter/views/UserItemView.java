@@ -9,6 +9,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.caregiver.R;
 import com.caregiver.core.Constants;
+import com.caregiver.core.WebApi;
 import com.caregiver.core.models.User;
 
 import androidx.appcompat.widget.LinearLayoutCompat;
@@ -21,7 +22,6 @@ public class UserItemView extends RecyclerView.ViewHolder {
     private TextView user_name, charges, about, designation, reviews;
     public Button btn_action;
     private RequestOptions requestOptions;
-
 
 
     public UserItemView(View itemView) {
@@ -50,12 +50,12 @@ public class UserItemView extends RecyclerView.ViewHolder {
     public void bind(User pi) {
 
         Glide.with(user_image.getContext())
-                .load(pi.Photo)
+                .load(WebApi.IMAGE_BASE_URL + pi.Photo)
                 .apply(requestOptions)
                 .into(user_image);
         user_name.setText((pi.First_Name + " " + pi.Last_Name).trim());
         if (pi.User_Type != Constants.USER_TYPE_GENERAL) {
-            charges.setText(itemView.getContext().getString(R.string.hourly_charges)+": " + pi.Charges + " CAD");
+            charges.setText(itemView.getContext().getString(R.string.hourly_charges) + ": " + pi.Charges + " CAD");
             about.setText(pi.about);
 
             about.setVisibility(View.VISIBLE);
@@ -67,9 +67,18 @@ public class UserItemView extends RecyclerView.ViewHolder {
             reviews.setVisibility(View.GONE);
         }
         designation.setText(getDesignation(pi.User_Type));
-        if(Constants.loginUser.User_Type != Constants.USER_TYPE_ADMIN){
+
+
+        if (Constants.loginUser.User_Type == Constants.USER_TYPE_ADMIN) {
+            btn_action.setVisibility(View.GONE);
+        } else if (pi.User_Type == Constants.USER_TYPE_NANEY
+                || pi.User_Type == Constants.USER_TYPE_NURSE
+        ) {
             btn_action.setVisibility(View.VISIBLE);
+        } else {
+            btn_action.setVisibility(View.GONE);
         }
+
     }
 
     private String getDesignation(int usertype) {

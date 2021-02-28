@@ -66,7 +66,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="Very professional caretaker.Good Service"
+        android:text="You can essentially be the Oprah of your community, recommending books, curating ideas, and helping people find the information they need to succeed."
         android:textColor="@color/color_light_black"
         android:textSize="13sp"
         android:textStyle="normal" />
