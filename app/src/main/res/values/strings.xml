@@ -138,4 +138,6 @@
     <string name="new_password">New Password</string>
 
     <string name="empty_review">No review found</string>
+
+    <string name="invalid_pass">Invalid password</string>
 </resources>
