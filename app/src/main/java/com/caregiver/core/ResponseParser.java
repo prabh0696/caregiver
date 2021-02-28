@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.caregiver.core.models.Address;
 import com.caregiver.core.models.Booking;
+import com.caregiver.core.models.Review;
 import com.caregiver.core.models.User;
 
 import org.json.JSONArray;
@@ -181,6 +182,39 @@ public final class ResponseParser {
                 pi.to_user_id = obj.getString("to_user_id");
                 pi.to_photo = obj.getString("to_photo");
 
+                list.add(pi);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Exception: " + e + " ::ResponseParser::parseBookingList");
+        }
+        return list;
+    }
+
+    public static List<Review> parseReviewList(String response) {
+        Log.d("file_tag", "parseApiStatus::response = " + response);
+        List<Review> list = new ArrayList<>();
+        try {
+            JSONObject jObj = new JSONObject(response);
+            JSONArray jArr = jObj.getJSONArray("data");
+            for (int i = 0; i < jArr.length(); i++) {
+                JSONObject obj = jArr.getJSONObject(i);
+                Review pi = new Review();
+                pi.booking_id = obj.getString("booking_id");
+                pi.review_date = obj.getString("review_date");
+                pi.review = obj.getString("review");
+                pi.from_email = obj.getString("from_email");
+                pi.from_first_name = obj.getString("from_first_name");
+                pi.from_last_name = obj.getString("from_last_name");
+                pi.from_phone = obj.getString("from_phone");
+                pi.from_user_id = obj.getString("from_user_id");
+                pi.from_photo = obj.getString("from_photo");
+                pi.to_email = obj.getString("to_email");
+                pi.to_first_name = obj.getString("to_first_name");
+                pi.to_last_name = obj.getString("to_last_name");
+                pi.to_phone = obj.getString("to_phone");
+                pi.to_user_id = obj.getString("to_user_id");
+                pi.to_photo = obj.getString("to_photo");
                 list.add(pi);
             }
 

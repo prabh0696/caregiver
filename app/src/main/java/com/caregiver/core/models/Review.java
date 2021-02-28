@@ -11,8 +11,10 @@ public class Review {
             from_phone = "",
             from_first_name = "",
             from_last_name = "",
+            from_photo = "",
             to_email = "",
             to_phone = "",
             to_first_name = "",
-            to_last_name = "";
+            to_last_name = "",
+            to_photo = "";
 }
