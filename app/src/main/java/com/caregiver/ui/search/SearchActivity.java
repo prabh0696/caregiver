@@ -71,6 +71,8 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b){
+                    radio_nanny.setChecked(false);
+                    radio_nurse.setChecked(false);
                     fetchData();
                 }
             }
@@ -81,16 +83,20 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b){
+                    radio_all.setChecked(false);
+                    radio_nurse.setChecked(false);
                     fetchData();
                 }
             }
         });
         radio_nurse = findViewById(R.id.radio_nurse);
-        radio_nanny.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+        radio_nurse.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
 
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b){
+                    radio_nanny.setChecked(false);
+                    radio_all.setChecked(false);
                     fetchData();
                 }
             }
@@ -122,7 +128,7 @@ public class SearchActivity extends AppCompatActivity {
         } else if (radio_nanny.isChecked()) {
             userType = "" + Constants.USER_TYPE_NANEY;
         }
-
+        Log.d(Constants.TAG, "userType = " + userType);
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");

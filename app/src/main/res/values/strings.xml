@@ -136,4 +136,6 @@
     <string name="refresh">Refresh</string>
     <string name="old_password">Old Password</string>
     <string name="new_password">New Password</string>
+
+    <string name="empty_review">No review found</string>
 </resources>
