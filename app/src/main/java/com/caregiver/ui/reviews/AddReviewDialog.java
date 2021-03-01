@@ -84,10 +84,14 @@ public final class AddReviewDialog extends Dialog {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
-        RequestBody body = RequestBody.create(mediaType, "from_user_id="+Constants.loginUser.id
+        String postData = "from_user_id="+Constants.loginUser.id
                 +"&to_user_id="+booking.to_user_id
                 +"&review="+comment
-                +"&booking_id="+booking.booking_id);
+                +"&booking_id="+booking.booking_id;
+
+        Log.d(Constants.TAG, "postData = " + postData);
+
+        RequestBody body = RequestBody.create(mediaType, postData);
         Request request = new Request.Builder()
                 .url(WebApi.ADD_REVIEW)
                 .method("POST", body)
@@ -107,6 +111,7 @@ public final class AddReviewDialog extends Dialog {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                Log.d(Constants.TAG, "response.body().string() = " + response.body().string());
                 WebApi.dismissLoadingDialog();
                 ((Activity) mContext).runOnUiThread(new Runnable() {
                     @Override

@@ -28,6 +28,7 @@ import com.caregiver.core.models.User;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.io.File;
 import java.io.IOException;
 
 import androidx.annotation.Nullable;
@@ -38,6 +39,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -250,50 +252,63 @@ public class SignupActivity extends AppCompatActivity implements BSImagePicker.O
     private void submitData(User user) {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
-        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
         String url = "";
         RequestBody body = null;
+        Log.d(Constants.TAG, "imagePath = " + imagePath);
+        Log.d(Constants.TAG, "new File(imagePath).exists() = " + new File(imagePath).exists());
         if (user.id == 0) {
             url = WebApi.SIGNUP;
-            body = RequestBody.create(mediaType, "first_name=" + user.First_Name
-                    + "&last_name=" + user.Last_Name
-                    + "&password=" + user.Password
-                    + "&user_type=" + user.User_Type
-                    + "&email=" + user.Email
-                    + "&phone=" + user.Phone
-                    + "&photo=" + user.Photo
-                    + "&charges=" + user.Charges
-                    + "&experience=" + user.Experience
-                    + "&qualification=" + user.Qualification
-                    + "&about=" + user.about
-                    + "&address=" + user.addr.Address
-                    + "&landmark=" + user.addr.landmark
-                    + "&street=" + user.addr.Street
-                    + "&city=" + user.addr.Street
-                    + "&state=" + user.addr.State
-                    + "&country=" + user.addr.Country
-                    + "&pincode=" + user.addr.Pincode);
+            MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+            if(imagePath != null && !TextUtils.isEmpty(imagePath)){
+                addFormData(builder, new File(imagePath));
+            }
+
+            builder.addFormDataPart("first_name", user.First_Name);
+            builder.addFormDataPart("last_name", user.Last_Name);
+            builder.addFormDataPart("password", user.Password);
+            builder.addFormDataPart("user_type", "" + user.User_Type);
+            builder.addFormDataPart("email", user.Email);
+            builder.addFormDataPart("phone", user.Phone);
+            builder.addFormDataPart("charges", user.Charges);
+            builder.addFormDataPart("experience", user.Experience);
+            builder.addFormDataPart("qualification", user.Qualification);
+            builder.addFormDataPart("about", user.about);
+            builder.addFormDataPart("address", user.addr.Address);
+            builder.addFormDataPart("landmark", user.addr.landmark);
+            builder.addFormDataPart("street", user.addr.Street);
+            builder.addFormDataPart("city", user.addr.City);
+            builder.addFormDataPart("state", user.addr.State);
+            builder.addFormDataPart("country", user.addr.Country);
+            builder.addFormDataPart("pincode", user.addr.Pincode);
+            body = builder.build();
+
         } else {
             url = WebApi.UPDATE_PROFILE;
-            body = RequestBody.create(mediaType, "id=" + user.id
-                    +"&first_name=" + user.First_Name
-                    + "&last_name=" + user.Last_Name
-                    + "&password=" + user.Password
-                    + "&user_type=" + user.User_Type
-                    + "&email=" + user.Email
-                    + "&phone=" + user.Phone
-                    + "&photo=" + user.Photo
-                    + "&charges=" + user.Charges
-                    + "&experience=" + user.Experience
-                    + "&qualification=" + user.Qualification
-                    + "&about=" + user.about
-                    + "&address=" + user.addr.Address
-                    + "&landmark=" + user.addr.landmark
-                    + "&street=" + user.addr.Street
-                    + "&city=" + user.addr.Street
-                    + "&state=" + user.addr.State
-                    + "&country=" + user.addr.Country
-                    + "&pincode=" + user.addr.Pincode);
+            MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+
+            builder.addFormDataPart("id", ""+user.id);
+            if(imagePath != null && !TextUtils.isEmpty(imagePath)){
+                addFormData(builder, new File(imagePath));
+            }
+
+            builder.addFormDataPart("first_name", user.First_Name);
+            builder.addFormDataPart("last_name", user.Last_Name);
+            builder.addFormDataPart("password", user.Password);
+            builder.addFormDataPart("user_type", "" + user.User_Type);
+            builder.addFormDataPart("email", user.Email);
+            builder.addFormDataPart("phone", user.Phone);
+            builder.addFormDataPart("charges", user.Charges);
+            builder.addFormDataPart("experience", user.Experience);
+            builder.addFormDataPart("qualification", user.Qualification);
+            builder.addFormDataPart("about", user.about);
+            builder.addFormDataPart("address", user.addr.Address);
+            builder.addFormDataPart("landmark", user.addr.landmark);
+            builder.addFormDataPart("street", user.addr.Street);
+            builder.addFormDataPart("city", user.addr.City);
+            builder.addFormDataPart("state", user.addr.State);
+            builder.addFormDataPart("country", user.addr.Country);
+            builder.addFormDataPart("pincode", user.addr.Pincode);
+            body = builder.build();
         }
 
 
@@ -318,27 +333,30 @@ public class SignupActivity extends AppCompatActivity implements BSImagePicker.O
             @Override
             public void onResponse(Call call, Response response) throws IOException {
 
-                if(user.id > 0){
+                if (user.id > 0) {
                     WebApi.dismissLoadingDialog();
+                    User user1 = ResponseParser.parseSignupResponse(response.body().string());
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             Intent intent = new Intent(Constants.PROFILE_UPDATED_ACTION);
-                            intent.putExtra(Constants.key_user, user);
+                            intent.putExtra(Constants.key_user, user1);
                             LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
                             finish();
                         }
                     });
-                }else{
+                } else {
                     User user1 = ResponseParser.parseSignupResponse(response.body().string());
                     WebApi.dismissLoadingDialog();
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if(user1 == null){
+                            if (user == null) {
                                 input_email.setError(getString(R.string.email_exist));
-                            }else {
+                                return;
+                            } else {
                                 Constants.loginUser = user1;
+                                Log.d(Constants.TAG, "user1 = " + user1);
                                 Intent intent = new Intent(SignupActivity.this, UserDetailActivity.class);
                                 intent.putExtra(Constants.key_is_from_signup, true);
                                 intent.putExtra(Constants.key_user, user1);
@@ -352,6 +370,12 @@ public class SignupActivity extends AppCompatActivity implements BSImagePicker.O
             }
         });
     }
+
+    private static void addFormData(MultipartBody.Builder builder, File file) {
+        builder.addFormDataPart("photo", file.getAbsolutePath(),
+                RequestBody.create(MediaType.parse("application/octet-stream"), file));
+    }
+
     private BroadcastReceiver broadcastReceiver;
 
     private void registerLocalBroadcastReciver() {
@@ -380,7 +404,7 @@ public class SignupActivity extends AppCompatActivity implements BSImagePicker.O
     @Override
     public void onSingleImageSelected(Uri uri, String tag) {
         if (uri != null) {
-            imagePath = uri.toString();
+            imagePath = uri.getPath();
             if (imagePath.toLowerCase().startsWith("content://")) {
                 imagePath = Utils.getRealPathFromUri(this, uri);
             }
