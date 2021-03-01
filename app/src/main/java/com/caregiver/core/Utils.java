@@ -5,13 +5,19 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.util.Patterns;
-
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.caregiver.core.models.User;
 import com.caregiver.ui.profile.ProfileActivity;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class Utils {
 
@@ -46,5 +52,16 @@ public class Utils {
         Intent intent = new Intent(context, ProfileActivity.class);
         intent.putExtra(Constants.key_user, pi);
         context.startActivity(intent);
+    }
+
+    public static List<LocalDate> datesBetween(LocalDate start, LocalDate end) {
+        List<LocalDate> ret = new ArrayList<LocalDate>();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) {
+                Log.d(Constants.TAG, "date.toString() = " + date.toString());
+                ret.add(date);
+            }
+        }
+        return ret;
     }
 }

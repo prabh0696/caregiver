@@ -10,6 +10,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.caregiver.R;
 import com.caregiver.core.Constants;
+import com.caregiver.core.WebApi;
 import com.caregiver.core.models.Booking;
 import com.caregiver.core.models.User;
 
@@ -55,6 +56,10 @@ public class BookingItemView extends RecyclerView.ViewHolder {
         String loginUserId = String.valueOf(Constants.loginUser.id);
         int statusInt = Integer.parseInt(pi.booking_status);
         if (loginUserId.equalsIgnoreCase(pi.from_user_id)) {
+            Glide.with(image.getContext())
+                    .load(WebApi.IMAGE_BASE_URL + pi.to_photo)
+                    .apply(requestOptions)
+                    .into(image);
             user_name.setText(pi.to_first_name + " " + pi.to_last_name);
             phone.setText(itemView.getContext().getString(R.string.phone) + " :" + pi.to_phone);
             email.setText(itemView.getContext().getString(R.string.email1) + " :" + pi.to_email);
@@ -72,13 +77,17 @@ public class BookingItemView extends RecyclerView.ViewHolder {
                 btn_accept.setVisibility(View.GONE);
             }
 
-            if (hasReview(pi.review_id)) {
-                btnReview.setVisibility(View.GONE);
-            } else {
+            if (!hasReview(pi.review_id) && statusInt == Constants.BOOKING_STATUS_COMPLETED) {
                 btnReview.setVisibility(View.VISIBLE);
+            } else {
+                btnReview.setVisibility(View.GONE);
             }
 
         } else if (loginUserId.equalsIgnoreCase(pi.to_user_id)) {
+            Glide.with(image.getContext())
+                    .load(WebApi.IMAGE_BASE_URL + pi.from_photo)
+                    .apply(requestOptions)
+                    .into(image);
             user_name.setText(pi.from_first_name + " " + pi.from_last_name);
             phone.setText(itemView.getContext().getString(R.string.phone) + " :" + pi.from_phone);
             email.setText(itemView.getContext().getString(R.string.email1) + " :" + pi.from_email);

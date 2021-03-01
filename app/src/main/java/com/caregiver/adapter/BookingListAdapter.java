@@ -86,14 +86,24 @@ public class BookingListAdapter extends RecyclerView.Adapter<BookingItemView> {
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openProfile(view.getContext(), items.get(holder.getLayoutPosition()).to_user_id);
+                Booking bb = items.get(holder.getLayoutPosition());
+                String userId = bb.from_user_id;
+                if(String.valueOf(Constants.loginUser.id).equalsIgnoreCase(userId)){
+                    userId = bb.to_user_id;
+                }
+                openProfile(view.getContext(), userId);
             }
         });
 
         holder.user_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openProfile(view.getContext(), items.get(holder.getLayoutPosition()).to_user_id);
+                Booking bb = items.get(holder.getLayoutPosition());
+                String userId = bb.from_user_id;
+                if(String.valueOf(Constants.loginUser.id).equalsIgnoreCase(userId)){
+                    userId = bb.to_user_id;
+                }
+                openProfile(view.getContext(), userId);
             }
         });
     }

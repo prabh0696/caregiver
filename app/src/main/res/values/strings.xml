@@ -140,4 +140,7 @@
     <string name="empty_review">No review found</string>
 
     <string name="invalid_pass">Invalid password</string>
+
+    <string name="error_from_date2">Not available</string>
+    <string name="error_to_date2">Not available</string>
 </resources>
